@@ -2,6 +2,7 @@
 @section('content')
 
 
+
  <!-- BANNER & SEARCH -->
     <section>
         <div class="str">
@@ -12,7 +13,12 @@
                             <div class="ban-tit">
                                 <span><i class="no1">#1</i> Matrimony</span>
                                 <h1>Find your<br><b>Right Match</b> here</h1>
-                                <p>Most trusted Matrimony Brand in the World.</p>
+                                <p>Most trusted Matrimony Brand in Tamil Nadu.</p>
+
+
+                                <div class="cta-full-wid">
+                                    <a href="#!" class="cta-dark-1 cta-dark">Register your Profile</a>
+                                </div>
                             </div>
                             <div class="ban-search chosenini">
                                 <form>
@@ -32,14 +38,7 @@
                                                 <label>Age</label>
                                                 <select class="chosen-select">
                                                     <option value="">Age</option>
-                                                    <option value="">18 to 30</option>
-                                                    <option value="">31 to 40</option>
-                                                    <option value="">41 to 50</option>
-                                                    <option value="">51 to 60</option>
-                                                    <option value="">61 to 70</option>
-                                                    <option value="">71 to 80</option>
-                                                    <option value="">81 to 90</option>
-                                                    <option value="">91 to 100</option>
+
                                                 </select>
                                             </div>
                                         </li>

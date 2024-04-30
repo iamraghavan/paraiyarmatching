@@ -328,3 +328,16 @@ if ($lis.length > 0) {
 
 }
 
+function getCurrentDateTime() {
+    var currentDate = new Date();
+    var options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
+    return currentDate.toLocaleString(undefined, options);
+}
+
+// Update the 'datetime' element with the current date and time
+function updateDateTime() {
+    document.getElementById("datetime").innerHTML = getCurrentDateTime();
+}
+
+// Call the updateDateTime function every second
+setInterval(updateDateTime, 1000);

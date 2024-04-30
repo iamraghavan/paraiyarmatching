@@ -1,3 +1,5 @@
+
+
 <div>
     <div class="head-top">
         <div class="container">
@@ -33,10 +35,10 @@
             <div class="hom-nav">
                 <!-- LOGO -->
                 <div class="logo">
-                    <span class="menu desk-menu">
+                    {{-- <span class="menu desk-menu">
                         <i></i><i></i><i></i>
-                    </span>
-                    <a href="{{ url("index.html") }}" class="logo-brand"><img src="{{ asset("/images/logo-b.png") }}" alt="" loading="lazy"
+                    </span> --}}
+                    <a href="{{ url("/") }}" class="logo-brand"><img src="{{ asset("/images/logo-b.png") }}" alt="" loading="lazy"
                             class="ic-logo"></a>
                 </div>
 
@@ -44,165 +46,68 @@
                 <div class="bl">
                     <ul>
                         <li class="smenu-pare">
-                            <span class="smenu">Explore</span>
+                            <span class="smenu">Partner Search</span>
                             <div class="smenu-open smenu-box">
                                 <div class="container">
                                     <div class="row">
-                                        <h4 class="tit">Explore category</h4>
+                                        <h4 class="tit">Search your Life Partner</h4>
                                         <ul>
                                             <li>
                                                 <div class="menu-box menu-box-2">
-                                                    <h5>Browse profiles <span>1200+ Verified profiles</span></h5>
+                                                    <h5> Brides <span>1200+ Verified profiles</span></h5>
                                                     <span class="explor-cta">More details</span>
-                                                    <a href="{{ url("all-profiles.html") }}" class="fclick"></a>
+                                                    <a href="{{ url("/") }}" class="fclick"></a>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="menu-box menu-box-1">
-                                                    <h5>Wedding page <span>Make reservation</span></h5>
+                                                    <h5>Grooms <span>1100+ Verified profiles</span></h5>
                                                     <span class="explor-cta">More details</span>
                                                     <a href="{{ url("wedding.html") }}" class="fclick"></a>
                                                 </div>
                                             </li>
-                                            <li>
-                                                <div class="menu-box menu-box-3">
-                                                    <h5>All Services<span>Lorem ipsum dummy</span></h5>
-                                                    <span class="explor-cta">More details</span>
-                                                    <a href="{{ url("services.html") }}" class="fclick"></a>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="menu-box menu-box-4">
-                                                    <h5>Join Now <span>Lorem ipsum dummy</span></h5>
-                                                    <span class="explor-cta">More details</span>
-                                                    <a href="{{ url("plans.html") }}" class="fclick"></a>
-                                                </div>
-                                            </li>
+
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                         </li>
-                        <li class="smenu-pare">
-                            <span class="smenu">All pages</span>
-                            <div class="smenu-open smenu-multi">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="multi-col">
-                                            <div class="inn">
-                                                <h4>Page sets 1</h4>
-                                                <ul>
-                                                    <li><a href="{{ url("all-profiles.html") }}">All profiles</a></li>
-                                                    <li><a href="{{ url("profile-details.html") }}">Profile details</a></li>
-                                                    <li><a href="{{ url("wedding.html") }}">Wedding</a></li>
-                                                    <li><a href="{{ url("wedding-video.html") }}">Wedding video</a></li>
-                                                    <li><a href="{{ url("services.html") }}">Our Services</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="multi-col">
-                                            <div class="inn">
-                                                <h4>Page sets 2</h4>
-                                                <ul>
-                                                    <li><a href="{{ url("plans.html") }}">Pricing plans</a></li>
-                                                    <li><a href="{{ url("login.html") }}">Login</a></li>
-                                                    <li><a href="{{ url("sign-up.html") }}">Sign-up</a></li>
-                                                    <li><a href="{{ url("photo-gallery.html") }}">Photo gallery</a></li>
-                                                    <li><a href="{{ url("photo-gallery-1.html") }}">Photo gallery 1</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="multi-col">
-                                            <div class="inn">
-                                                <h4>Page sets 3</h4>
-                                                <ul>
-                                                    <li><a href="{{ url("contact.html") }}">Contact</a></li>
-                                                    <li><a href="{{ url("about.html") }}">About</a></li>
-                                                    <li><a href="{{ url("blog.html") }}">Blog</a></li>
-                                                    <li><a href="{{ url("blog-detail.html") }}">Blog detail</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="multi-col">
-                                            <div class="inn">
-                                                <h4>Page sets 4</h4>
-                                                <ul>
-                                                    <li><a href="{{ url("enquiry.html") }}">Ask your doubts</a></li>
-                                                    <li><a href="{{ url("make-reservation.html") }}">Make Reservation</a></li>
-                                                    <li><a href="{{ url("faq.html") }}">FAQ</a></li>
-                                                    <li><a href="{{ url("coming-soon.html") }}" target="_blank">Coming soon</a>
-                                                    </li>
-                                                    <li><a href="{{ url("404.html") }}">404</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="multi-col full">
-                                            <div class="inn">
-                                                <h4>User dashboard pages</h4>
-                                    <ul>
-                                        <li><a href="{{ url("user-dashboard.html") }}">Dashboard</a></li>
-                                        <li><a href="{{ url("user-profile.html") }}">My profile</a></li>
-                                        <li><a href="{{ url("user-interests.html") }}">Interests</a></li>
-                                        <li><a href="{{ url("user-chat.html") }}">Chat lists</a></li>
-                                        <li><a href="{{ url("user-plan.html") }}">My plan details</a></li>
-                                        <li><a href="{{ url("user-setting.html") }}">Profile settings</a></li>
-                                        <li><a href="{{ url("user-profile-edit.html") }}">Edit full profile</a></li>
-                                        <li><a href="{{ url("login.html") }}">Sign in</a></li>
-                                    </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="smenu-pare">
-                            <span class="smenu">Top pages</span>
-                            <div class="smenu-open smenu-single">
-                                <ul>
-                                    <li><a href="{{ url("all-profiles.html") }}">All profiles</a></li>
-                                    <li><a href="{{ url("profile-details.html") }}">Profile details</a></li>
-                                    <li><a href="{{ url("wedding.html") }}">Wedding</a></li>
-                                    <li><a href="{{ url("blog.html") }}">Blog</a></li>
-                                    <li><a href="{{ url("blog-detail.html") }}">Blog detail</a></li>
-                                    <li><a href="{{ url("about.html") }}">About</a></li>
-                                    <li><a href="{{ url("contact.html") }}">Contact</a></li>
-                                    <li><a href="{{ url("photo-gallery.html") }}">Photo gallery</a></li>
-                                    <li><a href="{{ url("photo-gallery-1.html") }}">Photo gallery 1</a></li>
-                                    <li><a href="{{ url("login.html") }}">Login</a></li>
-                                    <li><a href="{{ url("sign-up.html") }}">Sign-up</a></li>
-                                    <li><a href="{{ url("plans.html") }}">Pricing plans</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li><a href="{{ url("plans.html") }}">Plans</a></li>
-                        <li><a href="{{ url("sign-up.html") }}">Register</a></li>
-                        <li class="smenu-pare">
-                            <span class="smenu">Dashboard</span>
-                            <div class="smenu-open smenu-single">
-                                <ul>
-                                    <li><a href="{{ url("user-dashboard.html") }}">Dashboard</a></li>
-                                    <li><a href="{{ url("user-profile.html") }}">My profile</a></li>
-                                    <li><a href="{{ url("user-interests.html") }}">Interests</a></li>
-                                    <li><a href="{{ url("user-chat.html") }}">Chat lists</a></li>
-                                    <li><a href="{{ url("user-plan.html") }}">My plan details</a></li>
-                                    <li><a href="{{ url("user-setting.html") }}">Profile settings</a></li>
-                                    <li><a href="{{ url("user-profile-edit.html") }}">Edit full profile</a></li>
-                                    <li><a href="{{ url("login.html") }}">Sign in</a></li>
-                                </ul>
-                            </div>
-                        </li>
+
+
+
+                        <li><a href="{{ url("sign-up.html") }}">Contact</a></li>
+                        <li><a href="{{ url("sign-up.html") }}">Help</a></li>
+
+                        @if(auth()->check())
+                        <li><a onclick="confirmLogout()">Logout</a></li>
+@else
+    <li><a href="{{ url("/app/register") }}">Register</a></li>
+    <li><a href="{{ url("/app/login") }}">Login</a></li>
+@endif
+
                     </ul>
                 </div>
 
                 <!-- USER PROFILE -->
-                <div class="al">
-                    <div class="head-pro">
-                        <img src="{{ asset("/images/profiles/1.jpg") }}" alt="" loading="lazy">
-                        <b>Advisor</b><br>
-                        <h4>Ashley emyy</h4>
-                        <span class="fclick"></span>
-                    </div>
-                </div>
+                @if(auth()->check())
+    <div class="al">
+        <div class="head-pro">
+
+            <b>{{ auth()->user()->name }}</b><br>
+            <h4>{{ auth()->user()->pmid }}</h4>
+            <span class="fclick"></span>
+        </div>
+    </div>
+@else
+    <div class="al">
+        <div class="head-pro">
+            {{-- <img src="{{ asset("/images/profiles/1.jpg") }}" alt="" loading="lazy"> --}}
+            <b> <h6 id="datetime" style="display: inline;" ></h6></b><br>
+        </div>
+    </div>
+@endif
+
+
 
                 <!--MOBILE MENU-->
                 <div class="mob-menu">
