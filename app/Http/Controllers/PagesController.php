@@ -60,7 +60,7 @@ class PagesController extends Controller
         if (Auth::attempt($validatedData, $request->filled('remember'))) {
             // Authentication successful
             RateLimiter::clear($key); // Clear login attempts
-            return redirect()->intended('/');
+            return redirect()->route('dashboard');
         }
 
         // Authentication failed
