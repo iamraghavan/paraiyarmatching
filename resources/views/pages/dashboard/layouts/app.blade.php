@@ -48,10 +48,27 @@
         <script src="{{ asset("/js/custom.js") }}"></script>
         @if(session('success'))
         <script>
-            swal({
+            Swal.fire({
                 title: 'Success!',
                 text: '{{ session('success') }}',
                 icon: 'success',
+                buttons: false,
+                timer: 3000,
+                showConfirmButton: false,
+                showCloseButton: true,
+                animation: true
+            });
+        </script>
+
+        @endif
+
+
+        @if(session('info'))
+        <script>
+            Swal.fire({
+                title: 'Information !',
+                text: '{{ session('info') }}',
+                icon: 'info',
                 buttons: false,
                 timer: 3000,
                 showConfirmButton: false,

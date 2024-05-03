@@ -21,21 +21,28 @@ class DashboardController extends Controller
             if ($profile) {
                 // Calculate profile completion percentage
                 $completionPercentage = $this->calculateProfileCompletion($profile);
-
+            
                 // Define completion thresholds for different levels of completion
                 if ($completionPercentage >= 100) {
+                    
                     return view('pages.dashboard.pages.index', compact('user', 'profile', 'completionPercentage'));
+                } elseif ($completionPercentage >= 80) {
+                  
+                    return view('pages.dashboard.pages.index', compact('user', 'profile', 'completionPercentage'))->with('info', 'Please complete the remaining profile information.');
                 } elseif ($completionPercentage >= 50) {
-                    // If 50% or more completed, consider profile half complete
-                    return view('pages.dashboard.pages.index', compact('user', 'profile', 'completionPercentage'))->with('info', 'Your profile is half complete.');
+                    
+                    return view('pages.dashboard.pages.index', compact('user', 'profile', 'completionPercentage'))->with('info', 'Your profile is halfway complete.');
                 } else {
-                    // If less than 50% completed, redirect to profile edit page
-                    return redirect()->route('user-profile-edit');
+                    
+                    return redirect()->route('user-profile-edit')->with('info', 'Could you please provide the missing data to complete your profile?');
                 }
             } else {
                 // If profile doesn't exist, redirect to profile edit page
                 return redirect()->route('user-profile-edit');
             }
+
+            
+
         } else {
             // If not authenticated, redirect to the login page
             return redirect()->route('login');

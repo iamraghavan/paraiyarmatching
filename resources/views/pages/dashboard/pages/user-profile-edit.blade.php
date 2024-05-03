@@ -65,26 +65,38 @@
                                         <div class="col-md-6 form-group">
                                             <label class="lb">Upload Profile Picture:</label>
 
-<input type="file" class="form-control @if($errors->has('imagepath')) is-invalid @endif " id="profile_image" name="profile_image" accept="image/*" onchange="previewImage(event)">
-        @error('profile_image')
-            <span class="text-danger">{{ $message }}</span>
-        @enderror
+                                            <!-- <input type="file" 
+                                            class="custom-file-input form-control @if($errors->has('imagepath')) is-invalid @endif" 
+                                            id="profile_image" 
+                                            name="profile_image" 
+                                            accept="image/*" 
+                                            onchange="previewImage(event)"> -->
+
+
+
+<label for="images" class="drop-container">
+    <span class="drop-title">Drop files here</span> or
+    <input class="@if($errors->has('imagepath')) is-invalid @endif" type="file" id="profile_image" onchange="previewImage(event)" name="profile_image" accept="image/*" required>
+</label>
+
+
+@error('profile_image')
+    <span class="text-danger">{{ $message }}</span>
+@enderror
 
 
                                         </div>
-                                        <div class="col-md-6">
-                                            <img id="preview_image" src="#" alt="Preview Image" style="max-width: 100%; max-height: 200px; margin-top: 10px;">
-                                            @if(empty($profile->profile_image))
-                                            @if($user->gender === 'male')
-                                                <img id="preview_image" src="https://cdn-icons-png.freepik.com/512/11195/11195340.png" alt="Male Profile Image" style="max-width: 100%; max-height: 200px; margin-top: 10px;">
-                                            @elseif($user->gender === 'female')
-                                                <img id="preview_image" src="https://cdn-icons-png.freepik.com/512/13979/13979770.png" alt="Female Profile Image" style="max-width: 100%; max-height: 200px; margin-top: 10px;">
-                                            @endif
-                                        @else
-                                            <img id="preview_image" src="{{ $profile->profile_image }}" alt="Preview Image" style="max-width: 100%; max-height: 200px; margin-top: 10px;">
-                                        @endif
-
-                                        </div>
+                                        <div class="profile-image-container col-md-6">
+    @if(empty($profile->profile_image))
+        @if($user->gender === 'male')
+            <img id="preview_image" src="https://cdn-icons-png.freepik.com/512/11195/11195340.png" alt="Male Profile Image" class="default-profile-image">
+        @elseif($user->gender === 'female')
+            <img id="preview_image" src="https://cdn-icons-png.freepik.com/512/13979/13979770.png" alt="Female Profile Image" class="default-profile-image">
+        @endif
+    @else
+        <img id="preview_image" src="{{ url($profile->profile_image) }}" alt="{{$user->name}}" class="profile-image">
+    @endif
+</div>
 
                                     </div>
 
@@ -104,7 +116,7 @@
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label class="lb">{{ $user->name }}, your Age is:</label>
-                                        <input type="number" class="form-control" id="age" placeholder="Your age" name="age" disabled>
+                                        <input type="text" class="form-control" id="age" placeholder="Your age" value="{{ $profile->age }}" readonly name="age">
                                     </div>
                                 </div>
 
