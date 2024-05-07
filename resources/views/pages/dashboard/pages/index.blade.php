@@ -23,6 +23,7 @@
 </div> --}}
 
 
+
 <section>
     <div class="db">
         <div class="container">
@@ -33,373 +34,198 @@
                         <div class="db-nav-list">
                             <ul>
                                 <li><a href="user-dashboard.html" class="act"><i class="fa fa-tachometer" aria-hidden="true"></i>Dashboard</a></li>
-                                <li><a href="user-profile.html"><i class="fa fa-male" aria-hidden="true"></i>Profile</a></li>
-                                <li><a href="user-interests.html"><i class="fa fa-handshake-o" aria-hidden="true"></i>Interests</a></li>
-                                <li><a href="user-chat.html"><i class="fa fa-commenting-o" aria-hidden="true"></i>Chat list</a></li>
-                                <li><a href="user-plan.html"><i class="fa fa-money" aria-hidden="true"></i>Plan</a></li>
-                                <li><a href="user-setting.html"><i class="fa fa-cog" aria-hidden="true"></i>Setting</a></li>
+                                <li>
+                                    <a href="user-profile.html">
+                                        @if($user->gender === 'male')
+                                            <i class="fa fa-male" aria-hidden="true"></i>
+                                        @elseif($user->gender === 'female')
+                                            <i class="fa fa-female" aria-hidden="true"></i>
+                                        @endif
+                                        Profile Download
+                                    </a>
+                                </li>
+                                <li><a href="user-profile.html"><i class="fa fa-bar-chart" aria-hidden="true"></i>Profile Statistics</a></li>
+                                <li><a href="user-setting.html"><i class="fa fa-cog" aria-hidden="true"></i>Edit Profile</a></li>
                                 <li><a href="#"><i class="fa fa-sign-out" aria-hidden="true"></i>Log out</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-8 col-lg-9">
-                    <div class="col-md-12 db-sec-com db-new-pro-main">
-                        <h2 class="db-tit">New Profiles Matches</h2>
-                        <ul class="slider">
-                            <li>
-                                <div class="db-new-pro">
-                                    <img src="images/profiles/16.jpg" alt="" class="profile">
-                                    <div>
-                                        <h5>Julia ann</h5>
-                                        <span class="city">New york</span>
-                                        <span class="age">22 Years old</span>
-                                    </div>
-                                    <div class="pro-ave" title="User currently available">
-                                        <span class="pro-ave-yes"></span>
-                                    </div>
-                                    <a href="profile-details.html" class="fclick" target="_blank">&nbsp;</a>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="db-new-pro">
-                                    <img src="images/profiles/2.jpg" alt="" class="profile">
-                                    <div>
-                                        <h5>Julia ann</h5>
-                                        <span class="city">New york</span>
-                                        <span class="age">22 Years old</span>
-                                    </div>
-                                    <a href="profile-details.html" class="fclick" target="_blank">&nbsp;</a>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="db-new-pro">
-                                    <img src="images/profiles/3.jpg" alt="" class="profile">
-                                    <div>
-                                        <h5>Julia ann</h5>
-                                        <span class="city">New york</span>
-                                        <span class="age">22 Years old</span>
-                                    </div>
-                                    <a href="profile-details.html" class="fclick" target="_blank">&nbsp;</a>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="db-new-pro">
-                                    <img src="images/profiles/4.jpg" alt="" class="profile">
-                                    <div>
-                                        <h5>Julia ann</h5>
-                                        <span class="city">New york</span>
-                                        <span class="age">22 Years old</span>
-                                    </div>
-                                    <a href="profile-details.html" class="fclick" target="_blank">&nbsp;</a>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="db-new-pro">
-                                    <img src="images/profiles/5.jpeg" alt="" class="profile">
-                                    <div>
-                                        <h5>Julia ann</h5>
-                                        <span class="city">New york</span>
-                                        <span class="age">22 Years old</span>
-                                    </div>
-                                    <a href="profile-details.html" class="fclick" target="_blank">&nbsp;</a>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="db-new-pro">
-                                    <img src="images/profiles/6.jpg" alt="" class="profile">
-                                    <div>
-                                        <h5>Julia ann</h5>
-                                        <span class="city">New york</span>
-                                        <span class="age">22 Years old</span>
-                                    </div>
-                                    <div class="pro-ave" title="User currently available">
-                                        <span class="pro-ave-yes"></span>
-                                    </div>
-                                    <a href="profile-details.html" class="fclick" target="_blank">&nbsp;</a>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="db-new-pro">
-                                    <img src="images/profiles/14.jpg" alt="" class="profile">
-                                    <div>
-                                        <h5>Julia ann</h5>
-                                        <span class="city">New york</span>
-                                        <span class="age">22 Years old</span>
-                                    </div>
-                                    <div class="pro-ave" title="User currently available">
-                                        <span class="pro-ave-yes"></span>
-                                    </div>
-                                    <a href="profile-details.html" class="fclick" target="_blank">&nbsp;</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
                     <div class="row">
-                        <div class="col-md-12 col-lg-6 col-xl-4 db-sec-com">
-                            <h2 class="db-tit">Profiles status</h2>
-                            <div class="db-pro-stat">
-                                <h6>Profile completion</h6>
-                                <div class="dropdown">
-                                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="dropdown">
-                                        <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                      <li><a class="dropdown-item" href="#">Edid profile</a></li>
-                                      <li><a class="dropdown-item" href="#">View profile</a></li>
-                                      <li><a class="dropdown-item" href="#">Profile visibility settings</a></li>
-                                    </ul>
-                                  </div>
-                                <div class="db-pro-pgog">
-                                    <span><b class="count">{{ $completionPercentage }}</b>%</span>
-                                </div>
-                                <ul class="pro-stat-ic">
-                                    <li><span><i class="fa fa-heart-o like" aria-hidden="true"></i><b>12</b>Likes</span></li>
-                                    <li><span><i class="fa fa-eye view" aria-hidden="true"></i><b>12</b>Views</span></li>
-                                    <li><span><i class="fa fa-handshake-o inte" aria-hidden="true"></i><b>12</b>Interests</span></li>
-                                    <li><span><i class="fa fa-hand-pointer-o clic" aria-hidden="true"></i><b>12</b>Clicks</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-md-12 col-lg-6 col-xl-4 db-sec-com">
-                            <h2 class="db-tit">Plan details</h2>
-                            <div class="db-pro-stat">
-                                <h6 class="tit-top-curv">Standard plan</h6>
-                                <div class="dropdown">
-                                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="dropdown">
-                                        <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                      <li><a class="dropdown-item" href="#">Edid profile</a></li>
-                                      <li><a class="dropdown-item" href="#">View profile</a></li>
-                                      <li><a class="dropdown-item" href="#">Plan change</a></li>
-                                      <li><a class="dropdown-item" href="#">Download invoice now</a></li>
-                                    </ul>
-                                </div>
-                                <div class="db-plan-card">
-                                    <img src="images/icon/plan.png" alt="">
-                                </div>
-                                <div class="db-plan-detil">
-                                    <ul>
-                                        <li>Plan name: <strong>Standard</strong></li>
-                                        <li>Validity: <strong>6 Months</strong></li>
-                                        <li>Valid till <strong>24 June 2024</strong></li>
-                                        <li><a href="" class="cta-3">Upgrade now</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12 col-xl-4 db-sec-com">
-                            <h2 class="db-tit">Recent chat list</h2>
-                                <div class="db-pro-stat">
-                                    <div class="db-inte-prof-list db-inte-prof-chat">
+                        <div class="col-md-12 db-sec-com">
+                            <h2 class="db-tit">Profile settings</h2>
+                            <div class="col7 fol-set-rhs">
+                                <!-- Profile Section -->
+                                <div class="ms-write-post fol-sett-sec sett-rhs-pro" style="">
+                                    <div class="foll-set-tit fol-pro-abo-ico">
+                                        <h5>{{ $user->pmid }}</h5>
+                                    </div>
+                                    <div class="fol-sett-box">
                                         <ul>
                                             <li>
-                                                <div class="db-int-pro-1"> <img src="images/profiles/2.jpg" alt=""> </div>
-                                                <div class="db-int-pro-2">
-                                                    <h5>Julia Ann</h5> <span>Illunois, United States</span> </div>
+                                                <div class="sett-lef">
+                                                    <div class="auth-pro-sm sett-pro-wid">
+
+                                                        <div class="auth-pro-sm-desc">
+                                                            <h3 class="text-uppercase" >{{ $user->name }}</h3>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </li>
-                                            <li>
-                                                <div class="db-int-pro-1"> <img src="images/profiles/16.jpg" alt=""> </div>
-                                                <div class="db-int-pro-2">
-                                                    <h5>Julia Ann</h5> <span>Illunois, United States</span> </div>
-                                            </li>
-                                            <li>
-                                                <div class="db-int-pro-1"> <img src="images/profiles/13.jpg" alt=""> </div>
-                                                <div class="db-int-pro-2">
-                                                    <h5>Julia Ann</h5> <span>Illunois, United States</span> </div>
-                                            </li>
-                                            <li>
-                                                <div class="db-int-pro-1"> <img src="images/profiles/14.jpg" alt=""> </div>
-                                                <div class="db-int-pro-2">
-                                                    <h5>Julia Ann</h5> <span>Illunois, United States</span> </div>
-                                            </li>
+
                                         </ul>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <ul>
+                                                    <li>
+                                                        <div class="sett-lef">
+                                                            <div class="sett-rad-left">
+                                                                <h5>Date of Birth</h5>
+                                                                <p>{{ $profile->dob }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="sett-lef">
+                                                            <div class="sett-rad-left">
+                                                                <h5>Age</h5>
+                                                                <p>{{ $profile->age }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="sett-lef">
+                                                            <div class="sett-rad-left">
+                                                                <h5>Height</h5>
+                                                                <p>{{ $profile->height }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="sett-lef">
+                                                            <div class="sett-rad-left">
+                                                                <h5>Religion</h5>
+                                                                <p>{{ $profile->religion }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="sett-lef">
+                                                            <div class="sett-rad-left">
+                                                                <h5>Mother Tongue</h5>
+                                                                <p>{{ $profile->mother_tongue }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="sett-lef">
+                                                            <div class="sett-rad-left">
+                                                                <h5>Marital Status</h5>
+                                                                <p>{{ $profile->marital_status }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="sett-lef">
+                                                            <div class="sett-rad-left">
+                                                                <h5>Disability</h5>
+                                                                <p>{{ $profile->disability }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="sett-lef">
+                                                            <div class="sett-rad-left">
+                                                                <h5>Family Status</h5>
+                                                                <p>{{ $profile->family_status }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <ul>
+
+<li>
+    <div class="sett-lef">
+        <div class="sett-rad-left">
+            <h5>Family Type</h5>
+            <p>{{ $profile->family_type }}</p>
+        </div>
+    </div>
+</li>
+<li>
+    <div class="sett-lef">
+        <div class="sett-rad-left">
+            <h5>Family Value</h5>
+            <p>{{ $profile->family_value }}</p>
+        </div>
+    </div>
+</li>
+<li>
+    <div class="sett-lef">
+        <div class="sett-rad-left">
+            <h5>Education</h5>
+            <p>{{ $profile->education }}</p>
+        </div>
+    </div>
+</li>
+<li>
+    <div class="sett-lef">
+        <div class="sett-rad-left">
+            <h5>Employed In</h5>
+            <p>{{ $profile->employed_in }}</p>
+        </div>
+    </div>
+</li>
+<li>
+    <div class="sett-lef">
+        <div class="sett-rad-left">
+            <h5>Occupation</h5>
+            <p>{{ $profile->occupation }}</p>
+        </div>
+    </div>
+</li>
+<li>
+    <div class="sett-lef">
+        <div class="sett-rad-left">
+            <h5>Annual Income</h5>
+            <p>{{ $profile->annual_income }}</p>
+        </div>
+    </div>
+</li>
+<li>
+    <div class="sett-lef">
+        <div class="sett-rad-left">
+            <h5>Work Location</h5>
+            <p>{{ $profile->work_location }}</p>
+        </div>
+    </div>
+</li>
+<li>
+    <div class="sett-lef">
+        <div class="sett-rad-left">
+            <h5>Residing State</h5>
+            <p>{{ $profile->residing_state }}</p>
+        </div>
+    </div>
+</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+
                                     </div>
                                 </div>
+                                <!-- End of Profile Section -->
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12 db-sec-com">
-                            <h2 class="db-tit">Interest request</h2>
-                            <div class="db-pro-stat">
-                                <div class="dropdown">
-                                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="dropdown">
-                                        <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                      <li><a class="dropdown-item" href="#">Edid profile</a></li>
-                                      <li><a class="dropdown-item" href="#">View profile</a></li>
-                                      <li><a class="dropdown-item" href="#">Plan change</a></li>
-                                      <li><a class="dropdown-item" href="#">Download invoice now</a></li>
-                                    </ul>
-                                </div>
-                                <div class="db-inte-main">
+                </div>
 
-                                      <ul class="nav nav-tabs" role="tablist">
-                                        <li class="nav-item">
-                                          <a class="nav-link active" data-bs-toggle="tab" href="#home">New requests</a>
-                                        </li>
-                                        <li class="nav-item">
-                                          <a class="nav-link" data-bs-toggle="tab" href="#menu1">Accept request</a>
-                                        </li>
-                                        <li class="nav-item">
-                                          <a class="nav-link" data-bs-toggle="tab" href="#menu2">Denay request</a>
-                                        </li>
-                                      </ul>
-                                      <!-- Tab panes -->
-<!-- Tab panes -->
-<div class="tab-content">
-<div id="home" class="container tab-pane active"><br>
-  <div class="db-inte-prof-list">
-        <ul>
-            <li>
-                <div class="db-int-pro-1"> <img src="images/profiles/men1.jpg" alt=""> <span class="badge bg-primary user-pla-pat">Platinum user</span></div>
-                <div class="db-int-pro-2">
-                    <h5>John Smith</h5>
-                    <ol class="poi">
-                        <li>City: <strong>Illunois</strong></li>
-                        <li>Age: <strong>21</strong></li>
-                        <li>Height: <strong>5.7</strong></li>
-                        <li>Job: <strong>Working</strong></li>
-                    </ol>
-                    <ol class="poi poi-date">
-                        <li>Request on: 10:30 AM, 18 August 2024</li>
-                    </ol>
-                    <a href="profile-details.html" class="cta-5" target="_blank">View full profile</a>
-                </div>
-                <div class="db-int-pro-3">
-                    <button type="button" class="btn btn-success btn-sm">Accept</button>
-                    <button type="button" class="btn btn-outline-danger btn-sm">Denay</button>
-                </div>
-            </li>
-            <li>
-                <div class="db-int-pro-1"> <img src="images/profiles/men2.jpg" alt=""> <span class="badge bg-primary user-pla-gold">Gold user</span></div>
-                <div class="db-int-pro-2">
-                    <h5>John Smith</h5>
-                    <ol class="poi">
-                        <li>City: <strong>Illunois</strong></li>
-                        <li>Age: <strong>21</strong></li>
-                        <li>Height: <strong>5.7</strong></li>
-                        <li>Job: <strong>Working</strong></li>
-                    </ol>
-                    <ol class="poi poi-date">
-                        <li>Request on: 10:30 AM, 18 August 2024</li>
-                    </ol>
-                    <a href="profile-details.html" class="cta-5" target="_blank">View full profile</a>
-                </div>
-                <div class="db-int-pro-3">
-                    <button type="button" class="btn btn-success btn-sm">Accept</button>
-                    <button type="button" class="btn btn-outline-danger btn-sm">Denay</button>
-                </div>
-            </li>
-            <li>
-                <div class="db-int-pro-1"> <img src="images/profiles/men3.jpg" alt=""> <span class="badge bg-primary user-pla-free">Free user</span></div>
-                <div class="db-int-pro-2">
-                    <h5>John Smith</h5>
-                    <ol class="poi">
-                        <li>City: <strong>Illunois</strong></li>
-                        <li>Age: <strong>21</strong></li>
-                        <li>Height: <strong>5.7</strong></li>
-                        <li>Job: <strong>Working</strong></li>
-                    </ol>
-                    <ol class="poi poi-date">
-                        <li>Request on: 10:30 AM, 18 August 2024</li>
-                    </ol>
-                    <a href="profile-details.html" class="cta-5" target="_blank">View full profile</a>
-                </div>
-                <div class="db-int-pro-3">
-                    <button type="button" class="btn btn-success btn-sm">Accept</button>
-                    <button type="button" class="btn btn-outline-danger btn-sm">Denay</button>
-                </div>
-            </li>
-            <li>
-                <div class="db-int-pro-1"> <img src="images/profiles/men4.jpg" alt=""> </div>
-                <div class="db-int-pro-2">
-                    <h5>John Smith</h5>
-                    <ol class="poi">
-                        <li>City: <strong>Illunois</strong></li>
-                        <li>Age: <strong>21</strong></li>
-                        <li>Height: <strong>5.7</strong></li>
-                        <li>Job: <strong>Working</strong></li>
-                    </ol>
-                    <ol class="poi poi-date">
-                        <li>Request on: 10:30 AM, 18 August 2024</li>
-                    </ol>
-                    <a href="profile-details.html" class="cta-5" target="_blank">View full profile</a>
-                </div>
-                <div class="db-int-pro-3">
-                    <button type="button" class="btn btn-success btn-sm">Accept</button>
-                    <button type="button" class="btn btn-outline-danger btn-sm">Denay</button>
-                </div>
-            </li>
-        </ul>
-    </div>
-</div>
-<div id="menu1" class="container tab-pane fade"><br>
-    <div class="db-inte-prof-list">
-        <ul>
-            <li>
-                <div class="db-int-pro-1"> <img src="images/profiles/men5.jpg" alt=""> </div>
-                <div class="db-int-pro-2">
-                    <h5>John Smith</h5>
-                    <ol class="poi">
-                        <li>City: <strong>Illunois</strong></li>
-                        <li>Age: <strong>21</strong></li>
-                        <li>Height: <strong>5.7</strong></li>
-                        <li>Job: <strong>Working</strong></li>
-                    </ol>
-                    <ol class="poi poi-date">
-                        <li>Request on: 10:30 AM, 18 August 2024</li>
-                        <li>Accept on: 3:000 PM, 21 August 2024</li>
-                    </ol>
-                    <a href="profile-details.html" class="cta-5" target="_blank">View full profile</a>
-                </div>
-                <div class="db-int-pro-3">
-                    <button type="button" class="btn btn-outline-danger btn-sm">Denay</button>
-                </div>
-            </li>
-        </ul>
-    </div>
-</div>
-<div id="menu2" class="container tab-pane fade"><br>
-    <div class="db-inte-prof-list">
-        <ul>
-            <li>
-                <div class="db-int-pro-1"> <img src="images/profiles/men1.jpg" alt=""> </div>
-                <div class="db-int-pro-2">
-                    <h5>John Smith</h5>
-                    <ol class="poi">
-                        <li>City: <strong>Illunois</strong></li>
-                        <li>Age: <strong>21</strong></li>
-                        <li>Height: <strong>5.7</strong></li>
-                        <li>Job: <strong>Working</strong></li>
-                    </ol>
-                    <ol class="poi poi-date">
-                        <li>Request on: 10:30 AM, 18 August 2024</li>
-                        <li>Denay on: 3:000 PM, 21 August 2024</li>
-                    </ol>
-                    <a href="profile-details.html" class="cta-5" target="_blank">View full profile</a>
-                </div>
-                <div class="db-int-pro-3">
-                    <button type="button" class="btn btn-success btn-sm">Accept</button>
-                </div>
-            </li>
-        </ul>
-    </div>
-</div>
-</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12 db-sec-com">
-                            <h2 class="db-tit">Profiles views</h2>
-                            <div class="chartin">
-                                <canvas id="Chart_leads"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

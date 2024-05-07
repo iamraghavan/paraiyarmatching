@@ -36,13 +36,13 @@ class ProfileController extends Controller
         // Retrieve the authenticated user
         $user = Auth::user();
 
-        // Check if the user already has a profile
-        $profile = $user->profile;
+        // Find the profile by user_pmid
+        $profile = Profile::where('user_pmid', $validatedData['user_pmid'])->first();
 
-        // If the user doesn't have a profile, create a new one
+        // If profile doesn't exist, create a new one
         if (!$profile) {
             $profile = new Profile();
-            $profile->id = $user->id;
+            $profile->user_pmid = $validatedData['user_pmid'];
         }
 
         // Update the profile data
@@ -51,13 +51,13 @@ class ProfileController extends Controller
         // Handle profile image upload
         if ($request->hasFile('profile_image')) {
             $image = $request->file('profile_image');
-            $fileName = strtolower($user->pmid) . '-' . time() . '.' . $image->getClientOriginalExtension();
+            $fileName = strtolower($validatedData['user_pmid']) . '-' . time() . '.' . $image->getClientOriginalExtension();
 
             // Move the uploaded image to the desired directory in public assets folder
-            $image->move(public_path('assets/images/profile/' . strtolower($user->pmid)), $fileName);
+            $image->move(public_path('assets/images/profile/' . strtolower($validatedData['user_pmid'])), $fileName);
 
             // Store the file path in the profile
-            $profile->profile_image = ('/assets/images/profile/' . strtolower($user->pmid) . '/' . $fileName);
+            $profile->profile_image = '/assets/images/profile/' . strtolower($validatedData['user_pmid']) . '/' . $fileName;
         }
         // Save the profile data
         $profile->save();

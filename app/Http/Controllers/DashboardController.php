@@ -1,54 +1,51 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use App\Models\Profile;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
+    // Dashboard index page
     public function index()
     {
         // Check if the user is authenticated
         if (Auth::check()) {
+            // Fetch the authenticated user
             $user = Auth::user();
 
             // Retrieve the profile associated with the authenticated user
             $profile = Profile::where('user_pmid', $user->pmid)->first();
 
+
+
+            // If profile exists
             if ($profile) {
                 // Calculate profile completion percentage
                 $completionPercentage = $this->calculateProfileCompletion($profile);
-            
-                // Define completion thresholds for different levels of completion
+
+                // Redirect based on completion percentage
                 if ($completionPercentage >= 100) {
-                    
                     return view('pages.dashboard.pages.index', compact('user', 'profile', 'completionPercentage'));
                 } elseif ($completionPercentage >= 80) {
-                  
                     return view('pages.dashboard.pages.index', compact('user', 'profile', 'completionPercentage'))->with('info', 'Please complete the remaining profile information.');
                 } elseif ($completionPercentage >= 50) {
-                    
                     return view('pages.dashboard.pages.index', compact('user', 'profile', 'completionPercentage'))->with('info', 'Your profile is halfway complete.');
                 } else {
-                    
-                    return redirect()->route('user-profile-edit')->with('info', 'Could you please provide the missing data to complete your profile?');
+                    // Redirect to profile edit page if completion percentage is less than 50%
+                    return redirect()->route('user-profile-edit', ['id' => $user->pmid])->with('info', 'Could you please provide the missing data to complete your profile?');
                 }
             } else {
                 // If profile doesn't exist, redirect to profile edit page
-                return redirect()->route('user-profile-edit');
+                return redirect()->route('user-profile-edit', ['id' => $user->pmid]);
             }
-
-            
-
         } else {
-            // If not authenticated, redirect to the login page
+            // If user is not authenticated, redirect to login page
             return redirect()->route('login');
         }
     }
-
 
     // Calculate profile completion percentage
     public function calculateProfileCompletion($profile)
@@ -71,7 +68,7 @@ class DashboardController extends Controller
     }
 
     // Profile edit page
-    public function user_profile_edit()
+    public function user_profile_edit($id)
     {
         // Check if the user is authenticated
         if (Auth::check()) {
@@ -85,6 +82,19 @@ class DashboardController extends Controller
         } else {
             // If not authenticated, redirect to the login page
             return redirect()->route('login');
+        }
+    }
+
+    // Edit user profile
+    public function editUserProfile($id)
+    {
+        $user = User::findOrFail($id); // Assuming you have a User model
+        $profile = Profile::where('user_id', $id)->first(); // Assuming you have a 'user_id' column in your profiles table
+
+        if ($profile) {
+            return view('user-profile-edit', compact('user', 'profile'));
+        } else {
+            return redirect()->route('user-profile-edit', ['id' => $user->pmid])->with('info', 'Could you please provide the missing data to complete your profile?');
         }
     }
 }

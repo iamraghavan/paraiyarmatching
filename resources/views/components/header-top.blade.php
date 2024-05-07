@@ -90,7 +90,9 @@
 
                 <!-- USER PROFILE -->
                 @if(auth()->check())
-    <div class="al">
+
+                <a href="{{url('/app/profile/dashboard')}}">
+    <div class="">
         <div class="head-pro">
 
             <b>{{ auth()->user()->name }}</b><br>
@@ -98,6 +100,7 @@
             <span class="fclick"></span>
         </div>
     </div>
+</a>
 @else
     <div class="al">
         <div class="head-pro">

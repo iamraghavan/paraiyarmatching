@@ -79,6 +79,23 @@
 
         @endif
 
+
+        @if(session('error'))
+        <script>
+            Swal.fire({
+                title: 'error !',
+                text: '{{ session('error') }}',
+                icon: 'error',
+                buttons: false,
+                timer: 3000,
+                showConfirmButton: false,
+                showCloseButton: true,
+                animation: true
+            });
+        </script>
+
+        @endif
+
         <script>
             // Get the elements
             const dobInput = document.getElementById('dob');
