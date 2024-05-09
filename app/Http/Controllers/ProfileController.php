@@ -63,6 +63,6 @@ class ProfileController extends Controller
         $profile->save();
 
         // Redirect back with a success message
-        return redirect()->back()->with('success', 'Profile updated successfully!');
+        return redirect()->route('dashboard')->with('success', 'Profile updated successfully!');
     }
 }

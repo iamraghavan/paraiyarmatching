@@ -8,11 +8,7 @@ use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\GalleryController;
 
-Route::middleware('auth')->group(function () {
-    Route::post('/gallery/upload', [GalleryController::class, 'upload'])->name('gallery.upload');
-    Route::get('/app/gallery/upload', [GalleryController::class, 'show_upload']);
-    Route::get('/gallery/{image}', [GalleryController::class, 'delete'])->name('gallery.delete');
-});
+
 
 
 Route::get('/', [PagesController::class, 'index'])->name('home');
@@ -27,11 +23,21 @@ Route::middleware('guest')->group(function () {
 
 
 
+
+
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/app/logout', [PagesController::class, 'logout'])->name('logout');
     Route::get('/app/profile/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/app/profile/user-profile-edit/{id}', [DashboardController::class, 'user_profile_edit'])->name('user-profile-edit');
     Route::match(['get', 'put', 'post'], '/app/profile/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
+
+
+    Route::post('/gallery/upload', [GalleryController::class, 'upload'])->name('gallery.upload');
+    Route::get('/app/gallery/upload', [GalleryController::class, 'show_upload']);
+    Route::get('/gallery/{image}', [GalleryController::class, 'delete'])->name('gallery.delete');
 });
 
 

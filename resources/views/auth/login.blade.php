@@ -22,7 +22,7 @@
                             <div class="form-tit">
                                 <h4>Start for free</h4>
                                 <h1>Sign in to Matrimony</h1>
-                                <p>Not a member? <a href="sign-up.html">Sign up now</a></p>
+                                <p>Not a member? <a href="{{url('/app/register')}}">Sign up now</a></p>
                             </div>
                             @if(session('error'))
     <div class="alert alert-danger" role="alert">

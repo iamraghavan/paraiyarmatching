@@ -33,9 +33,9 @@
                         <div class="db-nav-pro"><img src="{{url($profile->profile_image)}}" class="img-fluid" alt=""></div>
                         <div class="db-nav-list">
                             <ul>
-                                <li><a href="user-dashboard.html" class="act"><i class="fa fa-tachometer" aria-hidden="true"></i>Dashboard</a></li>
-                                <li>
-                                    <a href="user-profile.html">
+                                <li><a href="{{url('/app/profile/dashboard')}}" class="act"><i class="fa fa-tachometer" aria-hidden="true"></i>Dashboard</a></li>
+                                {{-- <li>
+                                    <a href="{{ route('download.profile.pdf') }}">
                                         @if($user->gender === 'male')
                                             <i class="fa fa-male" aria-hidden="true"></i>
                                         @elseif($user->gender === 'female')
@@ -43,10 +43,11 @@
                                         @endif
                                         Profile Download
                                     </a>
-                                </li>
-                                <li><a href="user-profile.html"><i class="fa fa-bar-chart" aria-hidden="true"></i>Profile Statistics</a></li>
-                                <li><a href="user-setting.html"><i class="fa fa-cog" aria-hidden="true"></i>Edit Profile</a></li>
-                                <li><a href="#"><i class="fa fa-sign-out" aria-hidden="true"></i>Log out</a></li>
+                                </li> --}}
+
+                                <li><a href="{{url('/app/gallery/upload')}}"><i class="fa fa-upload" aria-hidden="true"></i>Upload Gallery</a></li>
+                                <li><a href="{{ url('/app/profile/user-profile-edit/' . $user->pmid) }}"><i class="fa fa-cog" aria-hidden="true"></i>Edit Profile</a></li>
+                                <li><a onclick="confirmLogout()"><i class="fa fa-sign-out" aria-hidden="true"></i>Log out</a></li>
                             </ul>
                         </div>
                     </div>

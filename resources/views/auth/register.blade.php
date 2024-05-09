@@ -22,7 +22,7 @@
                             <div class="form-tit">
                                 <h4>Start for free</h4>
                                 <h1>Sign up to Matrimony</h1>
-                                <p>Already a member? <a href="login.html">Login</a></p>
+                                <p>Already a member? <a href="{{url('/app/login')}}">Login</a></p>
                             </div>
                             <div class="form-login">
                                 <form method="POST" action="{{ route('register') }}">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
 class DashboardController extends Controller
 {
@@ -18,8 +19,6 @@ class DashboardController extends Controller
 
             // Retrieve the profile associated with the authenticated user
             $profile = Profile::where('user_pmid', $user->pmid)->first();
-
-
 
             // If profile exists
             if ($profile) {
@@ -50,7 +49,10 @@ class DashboardController extends Controller
     // Calculate profile completion percentage
     public function calculateProfileCompletion($profile)
     {
-        $requiredFields = ['age', 'dob', 'religion', 'mother_tongue', 'marital_status'];
+        $requiredFields = [
+            'occupation',
+            'annual_income', 'work_location', 'residing_state',
+        ];
 
         // Count the completed fields
         $completedFields = 0;
@@ -66,6 +68,7 @@ class DashboardController extends Controller
 
         return $completionPercentage;
     }
+
 
     // Profile edit page
     public function user_profile_edit($id)

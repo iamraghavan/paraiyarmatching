@@ -77,7 +77,7 @@
 
 <label for="images" class="drop-container">
     <span class="drop-title">Drop files here</span> or
-    <input class="@if($errors->has('imagepath')) is-invalid @endif" type="file" id="profile_image" onchange="previewImage(event)" name="profile_image" accept="image/*" required>
+    <input class="@if($errors->has('imagepath')) is-invalid @endif" type="file" id="profile_image" onchange="previewImage(event)" name="profile_image" accept="image/*">
 </label>
 
 
