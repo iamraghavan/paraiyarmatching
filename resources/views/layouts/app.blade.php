@@ -14,6 +14,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
 
 
+    <style>
+        /* Hide the block on mobile devices */
+@media (max-width: 768px) {
+    .desktop-view {
+        display: none;
+    }
+}
+
+    </style>
+
 
 
     </head>
