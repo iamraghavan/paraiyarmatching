@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PhotoGallery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class GalleryController extends Controller
 {
@@ -62,15 +63,21 @@ class GalleryController extends Controller
 
         return redirect()->back()->with('success', 'Images uploaded successfully!');
     }
-
-    public function delete($image)
+    public function delete($imageId)
     {
+        // Find the image record in the database
+        $image = PhotoGallery::findOrFail($imageId);
 
+        // Get the file path from the database
+        $filePath = $image->image_url;
 
-        $image = PhotoGallery::where('id', $image)->first();
+        // Delete the image file from the project file location
+        if (Storage::disk('public')->exists($filePath)) {
+            Storage::disk('public')->delete($filePath);
+        }
+
+        // Delete the image record from the database
         $image->delete();
-
-
 
         return redirect()->back()->with('success', 'Image deleted successfully!');
     }

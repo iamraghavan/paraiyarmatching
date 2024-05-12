@@ -154,6 +154,41 @@
                 });
             }
         </script>
+<!-- Include Toastr library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+    // Function to check if all required fields are filled
+    function validateForm() {
+        // Check if profile image is selected
+        var profileImage = document.getElementById('profile_image');
+        if (profileImage.type === 'file' && !profileImage.value) {
+            return true; // No file selected, but allow form submission
+        }
+
+        // Check if any input field is empty
+        var inputs = document.querySelectorAll('input[type=text], input[type=email], input[type=number], input[type=date], select');
+        for (var i = 0; i < inputs.length; i++) {
+            var input = inputs[i];
+            if (!input.value.trim()) {
+                var fieldName = input.previousElementSibling.textContent.replace(':', '');
+                toastr.error(fieldName + ' is empty.', 'Error');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // Attach event listener for form submission
+    document.querySelector('form').addEventListener('submit', function(event) {
+        if (!validateForm()) {
+            // Prevent form submission if validation fails
+            event.preventDefault();
+        }
+    });
+</script>
 
 
 
