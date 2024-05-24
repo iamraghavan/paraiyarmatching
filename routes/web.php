@@ -10,7 +10,14 @@ use App\Http\Controllers\GalleryController;
 
 
 
+
+
+
+
 Route::get('/', [PagesController::class, 'index'])->name('home');
+
+
+
 
 
 Route::middleware('guest')->group(function () {
@@ -32,16 +39,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/app/profile/user-profile-edit/{id}', [DashboardController::class, 'user_profile_edit'])->name('user-profile-edit');
     Route::match(['get', 'put', 'post'], '/app/profile/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 
-
+    Route::get('/upload/horoscope', [HoroscopeController::class, 'uploadHoroscope'])->name('horoscope.uploads');
+    Route::get('/app/horoscope/upload', [DashboardController::class, 'horoscope_upload']);
 
     Route::post('/gallery/upload', [GalleryController::class, 'upload'])->name('gallery.upload');
     Route::get('/app/gallery/upload', [GalleryController::class, 'show_upload']);
     Route::get('/gallery/{image}', [GalleryController::class, 'delete'])->name('gallery.delete');
-
-
-
-    Route::post('/upload-horoscope', [HoroscopeController::class, 'uploadHoroscope'])->name('horoscope.uploads');
-    Route::get('/app/horoscope/upload', [DashboardController::class, 'horoscope_upload'])->name('horoscope.upload');
 });
 
 
