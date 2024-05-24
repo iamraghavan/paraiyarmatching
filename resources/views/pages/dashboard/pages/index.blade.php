@@ -34,16 +34,14 @@
                         <div class="db-nav-list">
                             <ul>
                                 <li><a href="{{url('/app/profile/dashboard')}}" class="act"><i class="fa fa-tachometer" aria-hidden="true"></i>Dashboard</a></li>
-                                {{-- <li>
-                                    <a href="{{ route('download.profile.pdf') }}">
-                                        @if($user->gender === 'male')
-                                            <i class="fa fa-male" aria-hidden="true"></i>
-                                        @elseif($user->gender === 'female')
-                                            <i class="fa fa-female" aria-hidden="true"></i>
-                                        @endif
-                                        Profile Download
-                                    </a>
-                                </li> --}}
+                                <li>
+                                    @if(isset($ipInfo['error']))
+                                    <p>Error fetching IP information: {{ $ipInfo['error'] }}</p>
+                                @else
+                                <p>{{ $ipInfo['timezone'] }} / {{ $ipInfo['country'] }} </p>
+
+                                    @endif
+                                </li>
 
                                 <li><a href="{{url('/app/gallery/upload')}}"><i class="fa fa-upload" aria-hidden="true"></i>Upload Gallery</a></li>
                                 <li><a href="{{url('/app/horoscope/upload')}}"><i class="fa fa-upload" aria-hidden="true"></i>Upload Horoscope</a></li>

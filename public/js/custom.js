@@ -341,3 +341,20 @@ function updateDateTime() {
 
 // Call the updateDateTime function every second
 setInterval(updateDateTime, 1000);
+
+
+function confirmLogout() {
+    // Show SweetAlert confirmation dialog
+    Swal.fire({
+        title: 'Are you sure you want to logout?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, logout',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        // Handle confirmation result
+        if (result.isConfirmed) {
+            window.location.href = '/app/logout'; // Redirect to logout URL
+        }
+    });
+}

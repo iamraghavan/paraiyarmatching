@@ -82,27 +82,9 @@
         <script src="{{ asset("/js/bootstrap.min.js") }}"></script>
         <script src="{{ asset("/js/select-opt.js") }}"></script>
         <script src="{{ asset("/js/slick.js") }}"></script>
-        <script src="{{ asset("/js/custom.js") }}"></script>
+        <script src="{{ asset("/js/custom.min.js") }}"></script>
 
 
-        <script>
-            // Function to handle logout click event
-            function confirmLogout() {
-                // Show SweetAlert confirmation dialog
-                Swal.fire({
-                    title: 'Are you sure you want to logout?',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, logout',
-                    cancelButtonText: 'Cancel'
-                }).then((result) => {
-                    // Handle confirmation result
-                    if (result.isConfirmed) {
-                        window.location.href = '/app/logout'; // Redirect to logout URL
-                    }
-                });
-            }
-        </script>
 
  @turnstileScripts()
 

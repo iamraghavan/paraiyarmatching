@@ -1,4 +1,32 @@
+@php
+    use Illuminate\Support\Facades\Http;
 
+    function fetch_ip()
+    {
+        try {
+            $response = Http::get('https://ipinfo.io/json');
+
+            if ($response->successful()) {
+                $data = $response->json();
+                $clientIP = $data['ip'];
+                $timezone = $data['timezone'];
+                $country = $data['country'];
+
+                return [
+                    'ip' => $clientIP,
+                    'timezone' => $timezone,
+                    'country' => $country,
+                ];
+            } else {
+                return ['error' => 'Unable to fetch IP information'];
+            }
+        } catch (\Exception $e) {
+            return ['error' => 'Sorry Please Refresh the Page to get IP information'];
+        }
+    }
+
+    $ipInfo = fetch_ip();
+@endphp
 
 <div>
     <div class="head-top">
@@ -45,6 +73,24 @@
                 <!-- EXPLORE MENU -->
                 <div class="bl">
                     <ul>
+
+                        @if(auth()->check())
+
+                        @if(isset($ipInfo['error']))
+                        <p>Error fetching IP information: {{ $ipInfo['error'] }}</p>
+                    @else
+
+
+                    <li><p>{{ $ipInfo['ip'] }}</p></li>
+
+
+                    @endif
+
+
+                    <li><p id="session"></p></li>
+
+                        @else
+
                         <li class="smenu-pare">
                             <span class="smenu">Partner Search</span>
                             <div class="smenu-open smenu-box">
@@ -77,6 +123,8 @@
 
                         <li><a href="{{ url("sign-up.html") }}">Contact</a></li>
                         <li><a href="{{ url("sign-up.html") }}">Help</a></li>
+                        @endif
+
 
                         @if(auth()->check())
                         <li><a onclick="confirmLogout()">Logout</a></li>
@@ -164,8 +212,46 @@
 
     </div>
 </div>
-<!-- END MOBILE MENU POPUP -->
 
-<!-- MOBILE USER PROFILE MENU POPUP -->
+<script>
+  let sessionTime = 300; // 5 minutes
 
-<!-- END USER PROFILE MENU POPUP -->
+// Update the session time every second
+const sessionTimeElement = document.querySelector('#session');
+let sessionTimeInterval;
+
+function startTimer() {
+    sessionTimeInterval = setInterval(function() {
+        sessionTime--;
+        const minutes = Math.floor(sessionTime / 60);
+        const seconds = sessionTime % 60;
+        sessionTimeElement.textContent = `Session : ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        if (sessionTime <= 0) {
+            Swal.fire({
+                title: 'Session Expired',
+                text: 'You will be logged out due to inactivity.',
+                icon: 'warning',
+                showConfirmButton: false,
+                timer: Math.floor(Math.random() * (5000 - 3000 + 1)) + 3000
+            });
+
+
+            setTimeout(function() {
+                window.location.href = '/app/logout';
+            }, 5000);
+
+            clearInterval(sessionTimeInterval);
+        }
+    }, 1000);
+}
+
+// Clear the timer on user activity
+document.addEventListener('mousemove', function() {
+    clearInterval(sessionTimeInterval);
+    sessionTime = 300;
+    startTimer();
+});
+
+// Start the timer
+startTimer();
+</script>

@@ -45,7 +45,7 @@
         <script src="{{ asset("/js/bootstrap.min.js") }}"></script>
         <script src="{{ asset("/js/select-opt.js") }}"></script>
         <script src="{{ asset("/js/slick.js") }}"></script>
-        <script src="{{ asset("/js/custom.js") }}"></script>
+        <script src="{{ asset("/js/custom.min.js") }}"></script>
         @if(session('success'))
         <script>
             Swal.fire({

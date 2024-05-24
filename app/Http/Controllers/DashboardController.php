@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+// use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+use Illuminate\Support\Facades\Http;
+
 
 class DashboardController extends Controller
 {
@@ -16,6 +18,8 @@ class DashboardController extends Controller
         if (Auth::check()) {
             // Fetch the authenticated user
             $user = Auth::user();
+
+            $ipInfo = $this->fetch_ip();
 
             // Retrieve the profile associated with the authenticated user
             $profile = Profile::where('user_pmid', $user->pmid)->first();
@@ -34,11 +38,11 @@ class DashboardController extends Controller
 
                 // Redirect based on completion percentage
                 if ($completionPercentage >= 100) {
-                    return view('pages.dashboard.pages.index', compact('user', 'profile', 'completionPercentage'));
+                    return view('pages.dashboard.pages.index', compact('user', 'profile', 'completionPercentage', 'ipInfo'));
                 } elseif ($completionPercentage >= 80) {
-                    return view('pages.dashboard.pages.index', compact('user', 'profile', 'completionPercentage'))->with('info', 'Please complete the remaining profile information.');
+                    return view('pages.dashboard.pages.index', compact('user', 'profile', 'completionPercentage', 'ipInfo'))->with('info', 'Please complete the remaining profile information.');
                 } elseif ($completionPercentage >= 50) {
-                    return view('pages.dashboard.pages.index', compact('user', 'profile', 'completionPercentage'))->with('info', 'Your profile is halfway complete.');
+                    return view('pages.dashboard.pages.index', compact('user', 'profile', 'completionPercentage', 'ipInfo'))->with('info', 'Your profile is halfway complete.');
                 } else {
                     // Redirect to profile edit page if completion percentage is less than 50%
                     return redirect()->route('user-profile-edit', ['id' => $user->pmid])->with('info', 'Could you please provide the missing data to complete your profile?');
@@ -117,11 +121,42 @@ class DashboardController extends Controller
 
             if ($profile) {
 
+                $horoscopeUrl = $profile->horoscope_url;
 
-                return view('pages.dashboard.pages.upload-horoscope', compact('user', 'profile'));
+                return view('pages.dashboard.pages.upload-horoscope', compact('user', 'profile', 'horoscopeUrl'));
             } else {
                 return redirect()->route('horoscope.upload', ['id' => $user->pmid])->with('info', 'Could you please provide the missing data to complete your profile?');
             }
+        }
+    }
+
+
+
+
+
+    /* IP Value Get */
+
+    public function fetch_ip()
+    {
+        try {
+            $response = Http::get('https://ipinfo.io/json');
+
+            if ($response->successful()) {
+                $data = $response->json();
+                $clientIP = $data['ip'];
+                $timezone = $data['timezone'];
+                $country = $data['country'];
+
+                return [
+                    'ip' => $clientIP,
+                    'timezone' => $timezone,
+                    'country' => $country,
+                ];
+            } else {
+                return ['error' => 'Unable to fetch IP information'];
+            }
+        } catch (\Exception $e) {
+            return ['error' => 'Sorry' . $e->getMessage()];
         }
     }
 }
