@@ -7,15 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class PhotoGallery extends Model
 {
-
-    protected $table = 'photo_gallery';
-
     use HasFactory;
 
-    protected $fillable = ['pmid', 'image_url'];
+    protected $table = 'photo_gallery'; // Ensure the correct table name
+    protected $fillable = ['user_pmid', 'image_url'];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'pmid', 'pmid');
+        return $this->belongsTo(User::class, 'user_pmid', 'pmid');
     }
 }

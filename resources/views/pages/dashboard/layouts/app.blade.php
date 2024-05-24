@@ -80,6 +80,8 @@
         @endif
 
 
+
+
         @if(session('error'))
         <script>
             Swal.fire({
@@ -190,7 +192,7 @@
     });
 </script>
 
-
+@turnstileScripts()
 
     </body>
 </html>

@@ -14,9 +14,10 @@ class GalleryController extends Controller
         if (Auth::check()) {
             // Fetch the authenticated user
             $user = Auth::user();
-            $images = PhotoGallery::where('pmid', $user->pmid)->get();
+            $images = PhotoGallery::where('user_pmid', $user->pmid)->get();
             return view('pages.dashboard.pages.upload-photo-gallery', compact('images', 'user'));
         }
+        return redirect()->route('login'); // Redirect to login if not authenticated
     }
 
     public function upload(Request $request)
@@ -30,7 +31,7 @@ class GalleryController extends Controller
 
         // Validate the uploaded images
         $request->validate([
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:40960', // Max size 2MB
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:40960', // Max size 40MB
         ]);
 
         // Handle errors during file upload
@@ -50,7 +51,7 @@ class GalleryController extends Controller
 
                 // Save the image to the database
                 $photoGallery = new PhotoGallery();
-                $photoGallery->pmid = (string) $user->pmid; // Ensure pmid is treated as a string
+                $photoGallery->user_pmid = $user->pmid; // Ensure column name matches the table definition
                 $photoGallery->image_url = $path . $fileName;
                 $photoGallery->save();
 
@@ -63,6 +64,7 @@ class GalleryController extends Controller
 
         return redirect()->back()->with('success', 'Images uploaded successfully!');
     }
+
     public function delete($imageId)
     {
         // Find the image record in the database

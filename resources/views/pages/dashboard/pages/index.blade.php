@@ -46,8 +46,10 @@
                                 </li> --}}
 
                                 <li><a href="{{url('/app/gallery/upload')}}"><i class="fa fa-upload" aria-hidden="true"></i>Upload Gallery</a></li>
+                                <li><a href="{{url('/app/horoscope/upload')}}"><i class="fa fa-upload" aria-hidden="true"></i>Upload Horoscope</a></li>
                                 <li><a href="{{ url('/app/profile/user-profile-edit/' . $user->pmid) }}"><i class="fa fa-cog" aria-hidden="true"></i>Edit Profile</a></li>
                                 <li><a onclick="confirmLogout()"><i class="fa fa-sign-out" aria-hidden="true"></i>Log out</a></li>
+
                             </ul>
                         </div>
                     </div>

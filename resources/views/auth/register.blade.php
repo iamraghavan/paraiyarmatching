@@ -99,6 +99,19 @@
                                         @enderror
                                     </div>
 
+
+                                    <div class="form-group">
+                                        <x-turnstile
+                                        data-action="login"
+                                        data-cdata="sessionid-123456789"
+                                        data-callback="callback"
+                                        data-expired-callback="expiredCallback"
+                                        data-error-callback="errorCallback"
+                                        data-theme="light"
+                                        data-tabindex="1"
+                                    />
+                                    </div>
+
                                     <button type="submit" class="btn btn-primary">Create Account</button>
                                 </form>
 

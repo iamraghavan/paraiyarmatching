@@ -104,6 +104,7 @@
             }
         </script>
 
+ @turnstileScripts()
 
     </body>
 </html>

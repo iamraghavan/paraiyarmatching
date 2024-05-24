@@ -41,11 +41,20 @@
                                         <label class="lb">Password:</label>
                                         <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="password" required>
                                     </div>
-                                    <div class="form-group form-check">
-                                        <label class="form-check-label">
-                                            <input class="form-check-input" type="checkbox" name="remember"> Remember me
-                                        </label>
+
+                                    <div class="form-group">
+                                        <x-turnstile
+                                            data-action="login"
+                                            data-cdata="sessionid-123456789"
+                                            data-callback="callback"
+                                            data-expired-callback="expiredCallback"
+                                            data-error-callback="errorCallback"
+                                            data-theme="light"
+                                            data-tabindex="1"
+                                        />
                                     </div>
+
+
                                     @if ($errors->any())
                                         <div class="alert alert-danger">
                                             <ul>

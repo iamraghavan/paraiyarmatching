@@ -20,6 +20,13 @@ class DashboardController extends Controller
             // Retrieve the profile associated with the authenticated user
             $profile = Profile::where('user_pmid', $user->pmid)->first();
 
+
+            if (Auth::check()) {
+                if ($profile && is_null($profile->horoscope_url)) {
+                    session()->flash('infos', 'Could you please provide your Horoscope Details to complete your profile');
+                }
+            }
+
             // If profile exists
             if ($profile) {
                 // Calculate profile completion percentage
@@ -98,6 +105,23 @@ class DashboardController extends Controller
             return view('user-profile-edit', compact('user', 'profile'));
         } else {
             return redirect()->route('user-profile-edit', ['id' => $user->pmid])->with('info', 'Could you please provide the missing data to complete your profile?');
+        }
+    }
+    public function horoscope_upload()
+    {
+        if (Auth::check()) {
+            $user = Auth::user();
+            $profile = Profile::where('user_pmid', $user->pmid)->first();
+
+
+
+            if ($profile) {
+
+
+                return view('pages.dashboard.pages.upload-horoscope', compact('user', 'profile'));
+            } else {
+                return redirect()->route('horoscope.upload', ['id' => $user->pmid])->with('info', 'Could you please provide the missing data to complete your profile?');
+            }
         }
     }
 }

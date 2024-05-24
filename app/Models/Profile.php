@@ -28,6 +28,7 @@ class Profile extends Model
         'work_location',
         'residing_state',
         'profile_image',
+        'horoscope_url',
 
     ];
 }

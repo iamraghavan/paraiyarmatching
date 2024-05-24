@@ -5,9 +5,8 @@ use App\Http\Controllers\PagesController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
-
+use App\Http\Controllers\HoroscopeController;
 use App\Http\Controllers\GalleryController;
-
 
 
 
@@ -38,6 +37,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/gallery/upload', [GalleryController::class, 'upload'])->name('gallery.upload');
     Route::get('/app/gallery/upload', [GalleryController::class, 'show_upload']);
     Route::get('/gallery/{image}', [GalleryController::class, 'delete'])->name('gallery.delete');
+
+
+
+    Route::post('/upload-horoscope', [HoroscopeController::class, 'uploadHoroscope'])->name('horoscope.uploads');
+    Route::get('/app/horoscope/upload', [DashboardController::class, 'horoscope_upload'])->name('horoscope.upload');
 });
 
 
