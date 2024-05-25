@@ -7,12 +7,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HoroscopeController;
 use App\Http\Controllers\GalleryController;
-
-
-
-
-
-
+use App\Http\Controllers\SearchResultController;
+use Google\ApiCore\Page;
 
 Route::get('/', [PagesController::class, 'index'])->name('home');
 
@@ -29,24 +25,38 @@ Route::middleware('guest')->group(function () {
 
 
 
-
-
-
-
-Route::middleware('auth')->group(function () {
+Route::group(['middleware' => ['auth']], function () {
     Route::get('/app/logout', [PagesController::class, 'logout'])->name('logout');
     Route::get('/app/profile/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/app/profile/user-profile-edit/{id}', [DashboardController::class, 'user_profile_edit'])->name('user-profile-edit');
     Route::match(['get', 'put', 'post'], '/app/profile/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 
-    Route::get('/upload/horoscope', [HoroscopeController::class, 'uploadHoroscope'])->name('horoscope.uploads');
+    Route::post('/upload/horoscope', [HoroscopeController::class, 'uploadHoroscope'])->name('horoscope.uploads');
     Route::get('/app/horoscope/upload', [DashboardController::class, 'horoscope_upload']);
 
     Route::post('/gallery/upload', [GalleryController::class, 'upload'])->name('gallery.upload');
     Route::get('/app/gallery/upload', [GalleryController::class, 'show_upload']);
     Route::get('/gallery/{image}', [GalleryController::class, 'delete'])->name('gallery.delete');
+
+
+
+    // Apart for Dashboard Routes / Common Routes
+
+    // Route::get('/', [PagesController::class, 'index'])->name('home');
+    Route::get('/app/profile/f/{id}', [PagesController::class, 'info_update'])->name('user-profile');
+
+    Route::group(['prefix' => 'app/result'], function () {
+        Route::post('/search-result', [SearchResultController::class, 'searchResult'])->name('searchResult');
+        Route::get('/search-results', [PagesController::class, 'showSearchResults'])->name('showSearchResult');
+    });
 });
 
 
+
+
 /* Register Page Route */
-Route::get('/app/profile/f/{id}', [PagesController::class, 'info_update'])->name('userProfileUpdate');
+
+Route::group(['prefix' => 'app/result'], function () {
+    Route::post('/search-result', [SearchResultController::class, 'searchResult'])->name('searchResult');
+    Route::get('/search-results', [PagesController::class, 'showSearchResults'])->name('showSearchResult');
+});

@@ -12,7 +12,7 @@ use App\Mail\SuccessfulLoginEmail;
 use Illuminate\Support\Facades\Mail;
 
 use App\Jobs\SendSuccessfulLoginEmail;
-
+use App\Models\Profile;
 
 class PagesController extends Controller
 {
@@ -86,13 +86,23 @@ class PagesController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect()->route('login');
+        session()->invalidate();
+        session()->regenerateToken();
+        session()->flush();
+
+        return redirect()->route('home');
     }
 
 
     public function info_update($id)
     {
-        $user = User::where('pmid', $id)->first();
+        $user = Profile::where('user_pmid', $id)->first();
         return view('pages.profile-information', ['user' => $user]);
+    }
+
+
+    public function showSearchResult()
+    {
+        return view('pages.search-results');
     }
 }

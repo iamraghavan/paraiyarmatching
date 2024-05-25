@@ -17,58 +17,61 @@
 
 
                                 <div class="cta-full-wid">
-                                    <a href="#!" class="cta-dark-1 cta-dark">Register your Profile</a>
+                                    <a href="{{url('/app/register')}}" class="cta-dark-1 cta-dark">Register your Profile</a>
                                 </div>
                             </div>
                             <div class="ban-search chosenini">
-                                <form>
+                                <form action="{{ route('searchResult') }}" method="POST">
+                                    @csrf
+
                                     <ul>
                                         <li class="sr-look">
                                             <div class="form-group">
-                                                <label>I'm looking for</label>
-                                                <select class="chosen-select">
+                                                <label for="looking_for">I'm looking for</label>
+                                                <select name="looking_for" class="chosen-select">
                                                     <option value="">I'm looking for</option>
-                                                    <option value="Men">Men</option>
-                                                    <option value="Women">Women</option>
+                                                    <option value="male">Groom</option>
+                                                    <option value="female">Bride</option>
                                                 </select>
                                             </div>
                                         </li>
                                         <li class="sr-age">
                                             <div class="form-group">
-                                                <label>Age</label>
-                                                <select class="chosen-select">
+                                                <label for="age">Age</label>
+                                                <select name="age" class="chosen-select">
                                                     <option value="">Age</option>
-
+                                                    @for($i = 21; $i <= 40; $i++)
+                                                        <option value="{{ $i }}">{{ $i }}</option>
+                                                    @endfor
                                                 </select>
                                             </div>
                                         </li>
                                         <li class="sr-reli">
                                             <div class="form-group">
-                                                <label>Religion</label>
-                                                <select class="chosen-select">
-                                                    <option>Religion</option>
-                                                    <option>Any</option>
-                                                    <option>Hindu</option>
-                                                    <option>Muslim</option>
-                                                    <option>Jain</option>
-                                                    <option>Christian</option>
+                                                <label for="religion">Religion</label>
+                                                <select name="religion" class="chosen-select">
+                                                    <option value="">Religion</option>
+                                                    <option value="Any">Any</option>
+                                                    <option value="Hindu">Hindu</option>
+                                                    <option value="Muslim">Muslim</option>
+                                                    <option value="Jain">Jain</option>
+                                                    <option value="Christian">Christian</option>
                                                 </select>
                                             </div>
                                         </li>
                                         <li class="sr-cit">
                                             <div class="form-group">
-                                                <label>City</label>
-                                                <select class="chosen-select">
+                                                <label for="city">City</label>
+                                                <select name="city" class="chosen-select">
                                                     <option value="">Select a city</option>
                                                     @foreach($cities as $city)
                                                         <option value="{{ $city->name }}">{{ $city->name }}</option>
                                                     @endforeach
                                                 </select>
-
                                             </div>
                                         </li>
                                         <li class="sr-btn">
-                                            <input type="submit" value="Search">
+                                            <input style="background: #4681f4" type="submit" value="Search">
                                         </li>
                                     </ul>
                                 </form>

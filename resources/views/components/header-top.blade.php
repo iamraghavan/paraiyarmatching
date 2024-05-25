@@ -1,3 +1,4 @@
+
 @php
     use Illuminate\Support\Facades\Http;
 
@@ -73,24 +74,13 @@
                 <!-- EXPLORE MENU -->
                 <div class="bl">
                     <ul>
-
                         @if(auth()->check())
-
-                        @if(isset($ipInfo['error']))
-                        <p>Error fetching IP information: {{ $ipInfo['error'] }}</p>
-                    @else
-
-
-                    <li><p>{{ $ipInfo['ip'] }}</p></li>
-
-
-                    @endif
-
-
-                    <li><p id="session"></p></li>
-
+                            @if(isset($ipInfo['error']))
+                                <p>Error fetching IP information: {{ $ipInfo['error'] }}</p>
+                            @else
+                                <li><p>{{ $ipInfo['ip'] }}</p></li>
+                            @endif
                         @else
-
                         <li class="smenu-pare">
                             <span class="smenu">Partner Search</span>
                             <div class="smenu-open smenu-box">
@@ -119,41 +109,40 @@
                             </div>
                         </li>
 
-
-
-                        <li><a href="{{ url("sign-up.html") }}">Contact</a></li>
-                        <li><a href="{{ url("sign-up.html") }}">Help</a></li>
+                            <li><a href="{{ url("sign-up.html") }}">Contact</a></li>
+                            <li><a href="{{ url("sign-up.html") }}">Take a Tour</a></li>
+                            <li><a href="{{ url("sign-up.html") }}">Help</a></li>
                         @endif
 
-
                         @if(auth()->check())
-                        <li><a onclick="confirmLogout()">Logout</a></li>
-@else
-    <li><a href="{{ url("/app/register") }}">Register</a></li>
-    <li><a href="{{ url("/app/login") }}">Login</a></li>
-@endif
-
+                            <li><a onclick="confirmLogout()">Logout</a></li>
+                        @else
+                            <li><a href="{{ url("/app/register") }}">Register</a></li>
+                            <li><a href="{{ url("/app/login") }}">Login</a></li>
+                        @endif
                     </ul>
                 </div>
 
                 <!-- USER PROFILE -->
                 @if(auth()->check())
-                <a href="{{ url('/app/profile/dashboard') }}">
+
                     <div class="desktop-view"> <!-- Add a class for desktop view -->
                         <div class="">
                             <div class="head-pro">
+
                                 <b>{{ auth()->user()->name }}</b><br>
                                 <h4>{{ auth()->user()->pmid }}</h4>
                                 <span class="fclick"></span>
+
                             </div>
                         </div>
                     </div>
-                </a>
+
             @else
                 <div class="al">
                     <div class="head-pro">
                         {{-- <img src="{{ asset("/images/profiles/1.jpg") }}" alt="" loading="lazy"> --}}
-                        <b><h6 id="datetime" style="display: inline;"></h6></b><br>
+                        <b><h6 id="datetimes" style="display: inline;"></h6></b><br>
                     </div>
                 </div>
             @endif
@@ -190,6 +179,13 @@
    <!-- EXPLORE MENU POPUP -->
    <div class="mob-me-all mobile_menu">
     <div class="mob-me-clo"><img src="{{ asset("/images/icon/close.svg") }}" alt=""></div>
+     @if(auth()->check())
+                            @if(isset($ipInfo['error']))
+                                <p>Error fetching IP information: {{ $ipInfo['error'] }}</p>
+                            @else
+                                <li><p>{{ $ipInfo['ip'] }}</p></li>
+                            @endif
+                        @else
     <div class="mv-bus">
         <h4><i class="fa fa-globe" aria-hidden="true"></i> EXPLORE CATEGORY</h4>
         <ul>
@@ -200,7 +196,11 @@
         <h4><i class="fa fa-align-center" aria-hidden="true"></i> All Pages</h4>
         <ul>
             <li><a href="{{ url("#") }}">Contact</a></li>
+            <li><a href="{{ url("#") }}">Take a Tour</a></li>
             <li><a href="{{ url("#") }}">Help</a></li>
+
+            @endif
+
             @if(auth()->check())
             <li><a onclick="confirmLogout()">Logout</a></li>
 @else
@@ -213,45 +213,4 @@
     </div>
 </div>
 
-<script>
-  let sessionTime = 300; // 5 minutes
 
-// Update the session time every second
-const sessionTimeElement = document.querySelector('#session');
-let sessionTimeInterval;
-
-function startTimer() {
-    sessionTimeInterval = setInterval(function() {
-        sessionTime--;
-        const minutes = Math.floor(sessionTime / 60);
-        const seconds = sessionTime % 60;
-        sessionTimeElement.textContent = `Session : ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        if (sessionTime <= 0) {
-            Swal.fire({
-                title: 'Session Expired',
-                text: 'You will be logged out due to inactivity.',
-                icon: 'warning',
-                showConfirmButton: false,
-                timer: Math.floor(Math.random() * (5000 - 3000 + 1)) + 3000
-            });
-
-
-            setTimeout(function() {
-                window.location.href = '/app/logout';
-            }, 5000);
-
-            clearInterval(sessionTimeInterval);
-        }
-    }, 1000);
-}
-
-// Clear the timer on user activity
-document.addEventListener('mousemove', function() {
-    clearInterval(sessionTimeInterval);
-    sessionTime = 300;
-    startTimer();
-});
-
-// Start the timer
-startTimer();
-</script>

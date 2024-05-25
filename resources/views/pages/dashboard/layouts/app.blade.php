@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>{{ $user->name }} - {{ $user->pmid }} - Paraiyar Matching - Matchfinder for brides and grooms </title>
 
         {{-- Link & Style --}}
@@ -16,7 +16,6 @@
     {{-- Style & Link CDN --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
-
 
 
 
@@ -193,6 +192,7 @@
 </script>
 
 @turnstileScripts()
+{{-- <script src="{{ asset('js/inactivity-logout.js') }}" defer></script> --}}
 
     </body>
 </html>
