@@ -24,6 +24,11 @@ class PagesController extends Controller
         return view('pages.index', ['cities' => $cities]);
     }
 
+    public function membership_package()
+    {
+        return view('pages.membership-package');
+    }
+
 
     /* Regsiter */
     public function register()
@@ -51,8 +56,8 @@ class PagesController extends Controller
 
         // Validate form data
         $validatedData = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
+            'email' => ['required', 'email', 'max:255', 'exists:users,email'],
+            'password' => ['required', 'string', 'min:8'],
         ]);
 
         // Check if the user has exceeded the maximum number of login attempts for the current IP address
@@ -62,7 +67,6 @@ class PagesController extends Controller
 
         // Attempt to authenticate user
         if (Auth::attempt($validatedData, $request->filled('remember'))) {
-
             RateLimiter::clear($key);
 
             // Dispatch job to send successful login email
@@ -76,6 +80,10 @@ class PagesController extends Controller
 
         if (RateLimiter::tooManyAttempts($key, 3)) {
             return back()->withErrors(['email' => 'Too many login attempts. Please try again later.']);
+        }
+
+        if (!Auth::check()) {
+            abort(403, 'Unauthorized action.');
         }
 
         return back()->withErrors(['password' => 'Incorrect password.']);
@@ -94,6 +102,7 @@ class PagesController extends Controller
     }
 
 
+
     public function info_update($id)
     {
         $user = Profile::where('user_pmid', $id)->first();
@@ -103,6 +112,7 @@ class PagesController extends Controller
 
     public function showSearchResult()
     {
-        return view('pages.search-results');
+        $cities = Cities::select('name')->get();
+        return view('pages.search-results', ['cities' => $cities]);
     }
 }

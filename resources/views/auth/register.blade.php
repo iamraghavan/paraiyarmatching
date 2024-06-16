@@ -13,7 +13,7 @@
                             <h2>Now <b>Find your life partner</b> Easy and fast.</h2>
                         </div>
                         <div class="im">
-                            <img src="images/login-couple.png" alt="">
+                            <img src="{{asset('images/login-couple.png')}}" alt="PMAT01">
                         </div>
                         <div class="log-bg">&nbsp;</div>
                     </div>
@@ -27,6 +27,22 @@
                             <div class="form-login">
                                 <form method="POST" action="{{ route('register') }}">
                                     @csrf
+
+                                    @if (session('error'))
+                                        <div class="alert alert-danger">
+                                            {{ session('error') }}
+                                        </div>
+                                    @endif
+
+                                    @if ($errors->any())
+                                        <div class="alert alert-danger">
+                                            <ul>
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
 
                                     <div class="form-group">
                                         <label class="lb" for="name">Name:</label>
@@ -65,6 +81,7 @@
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
+                                        <span class="invalid-feedback" id="email-error"></span>
                                     </div>
 
                                     <div class="form-group">
@@ -75,6 +92,7 @@
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
+                                        <span class="invalid-feedback" id="phone-error"></span>
                                     </div>
 
                                     <div class="form-group">
@@ -85,6 +103,7 @@
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
+                                        <span class="invalid-feedback" id="password-error"></span>
                                     </div>
 
                                     <div class="form-group form-check">
@@ -99,24 +118,23 @@
                                         @enderror
                                     </div>
 
-
-                                    <div class="form-group">
+                                    {{-- <div class="form-group">
                                         <x-turnstile
-                                        data-action="login"
-                                        data-cdata="sessionid-123456789"
-                                        data-callback="callback"
-                                        data-expired-callback="expiredCallback"
-                                        data-error-callback="errorCallback"
-                                        data-theme="light"
-                                        data-tabindex="1"
-                                    />
-                                    </div>
+                                            data-action="login"
+                                            data-cdata="sessionid-123456789"
+                                            data-callback="callback"
+                                            data-expired-callback="expiredCallback"
+                                            data-error-callback="errorCallback"
+                                            data-theme="light"
+                                            data-tabindex="1"
+                                        />
+                                    </div> --}}
 
                                     <button type="submit" class="btn btn-primary">Create Account</button>
                                 </form>
-
                             </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -125,5 +143,73 @@
     </div>
 </section>
 <!-- END -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const emailInput = document.getElementById('email');
+    const phoneInput = document.getElementById('phone');
+    const passwordInput = document.getElementById('password');
+    const submitBtn = document.getElementById('submit-btn');
+
+    const emailError = document.getElementById('email-error');
+    const phoneError = document.getElementById('phone-error');
+    const passwordError = document.getElementById('password-error');
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const phoneRegex = /^\d{10}$/;
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    function validateEmail() {
+        const email = emailInput.value;
+        if (!emailRegex.test(email)) {
+            emailError.textContent = 'Please enter a valid email address.';
+            emailInput.classList.add('is-invalid');
+            return false;
+        } else {
+            emailError.textContent = '';
+            emailInput.classList.remove('is-invalid');
+            return true;
+        }
+    }
+
+    function validatePhone() {
+        const phone = phoneInput.value;
+        if (!phoneRegex.test(phone)) {
+            phoneError.textContent = 'Please enter a valid 10-digit phone number.';
+            phoneInput.classList.add('is-invalid');
+            return false;
+        } else {
+            phoneError.textContent = '';
+            phoneInput.classList.remove('is-invalid');
+            return true;
+        }
+    }
+
+    function validatePassword() {
+        const password = passwordInput.value;
+        if (!passwordRegex.test(password)) {
+            passwordError.textContent = 'Password must be at least 8 characters long, include a letter, a number, and a special character.';
+            passwordInput.classList.add('is-invalid');
+            return false;
+        } else {
+            passwordError.textContent = '';
+            passwordInput.classList.remove('is-invalid');
+            return true;
+        }
+    }
+
+    function validateForm() {
+        const isEmailValid = validateEmail();
+        const isPhoneValid = validatePhone();
+        const isPasswordValid = validatePassword();
+        submitBtn.disabled = !(isEmailValid && isPhoneValid && isPasswordValid);
+    }
+
+    emailInput.addEventListener('input', validateForm);
+    phoneInput.addEventListener('input', validateForm);
+    passwordInput.addEventListener('input', validateForm);
+});
+
+</script>
 
 @endsection

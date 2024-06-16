@@ -14,9 +14,19 @@ class DashboardController extends Controller
     // Dashboard index page
     public function index()
     {
-        // Check if the user is authenticated
+
+        if (!Auth::check()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+
         if (Auth::check()) {
-            // Fetch the authenticated user
+
+            if (!Auth::check()) {
+                abort(403, 'Unauthorized action.');
+            }
+
+
             $user = Auth::user();
 
             $ipInfo = $this->fetch_ip();
@@ -82,7 +92,7 @@ class DashboardController extends Controller
 
 
     // Profile edit page
-    public function user_profile_edit($id)
+    public function user_profile_edit($id, $dummy = null)
     {
         // Check if the user is authenticated
         if (Auth::check()) {
@@ -93,6 +103,25 @@ class DashboardController extends Controller
             $profile = Profile::where('user_pmid', $user->pmid)->first();
 
             return view('pages.dashboard.pages.user-profile-edit', compact('user', 'profile'));
+        } else {
+            // If not authenticated, redirect to the login page
+            return redirect()->route('login');
+        }
+    }
+
+
+    public function edit_personal_data($id, $dummys = null)
+
+    {
+        // Check if the user is authenticated
+        if (Auth::check()) {
+            // If authenticated, fetch the authenticated user
+            $user = Auth::user();
+
+            // Retrieve the profile associated with the authenticated user
+            $profile = Profile::where('user_pmid', $user->pmid)->first();
+
+            return view('pages.dashboard.pages.edit-personal-data', compact('user', 'profile'));
         } else {
             // If not authenticated, redirect to the login page
             return redirect()->route('login');

@@ -13,6 +13,62 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
 
+    <style>
+          .cta {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+        .cta:hover {
+            background-color: #0056b3;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            border-radius: 8px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+    </style>
+
     {{-- <script src="{{ asset('js/inactivity-logout.js') }}" defer></script> --}}
     <style>
         /* Hide the block on mobile devices */
@@ -38,10 +94,18 @@
         @yield('content')
 
 
+        @if(session('alert'))
+        <div class="alert alert-warning">
+            {{ session('alert') }}
+        </div>
+    @endif
+
+
+
 
 @if(session('success'))
 <script>
-    swal({
+    Swal.fire({
         title: 'Success!',
         text: '{{ session('success') }}',
         icon: 'success',
@@ -58,7 +122,7 @@
 
 @if(session('error'))
 <script>
-    swal({
+    Swal.fire({
         title: 'Error!',
         text: '{{ session('error') }}',
         icon: 'error',
@@ -71,6 +135,10 @@
 </script>
 @endif
 
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+{{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> --}}
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>

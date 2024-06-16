@@ -34,18 +34,33 @@
                         <div class="db-nav-list">
                             <ul>
                                 <li><a href="{{url('/app/profile/dashboard')}}" class="act"><i class="fa fa-tachometer" aria-hidden="true"></i>Dashboard</a></li>
-                                <li>
-                                    @if(isset($ipInfo['error']))
-                                    <p>Error fetching IP information: {{ $ipInfo['error'] }}</p>
-                                @else
-                                <p>{{ $ipInfo['timezone'] }} / {{ $ipInfo['country'] }} </p>
-
-                                    @endif
-                                </li>
 
                                 <li><a href="{{url('/app/gallery/upload')}}"><i class="fa fa-upload" aria-hidden="true"></i>Upload Gallery</a></li>
                                 <li><a href="{{url('/app/horoscope/upload')}}"><i class="fa fa-upload" aria-hidden="true"></i>Upload Horoscope</a></li>
-                                <li><a href="{{ url('/app/profile/user-profile-edit/' . $user->pmid) }}"><i class="fa fa-cog" aria-hidden="true"></i>Edit Profile</a></li>
+                                <li><a href="{{url('/')}}"><i class="fa fa-money" aria-hidden="true"></i>Plan</a></li>
+                                    @php
+                                    function generateRandomString($length = 100) {
+                                        return substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', $length)), 0, $length);
+                                    }
+
+                                    $randomString = generateRandomString(); // Creates a long random alphanumeric string
+                                    $salt = 'pmat'; // You can generate a more secure salt or use a constant
+                                    $saltedString = $randomString . $salt;
+                                    $hashedString = hash('sha256', $saltedString); // Hash the salted string using SHA-256
+                                @endphp
+
+                                <li>
+                                    <a href="{{ url('/app/profile/user-profile-edit/' . $user->pmid . '/' . $hashedString) }}">
+                                        <i class="fa fa-cog" aria-hidden="true"></i>Edit Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/app/profile/edit-personal-data/' . $user->pmid . '/' . $hashedString) }}">
+                                        <i class="fa fa-cog" aria-hidden="true"></i>Edit Personal Data
+                                    </a>
+                                </li>
+
+
                                 <li><a onclick="confirmLogout()"><i class="fa fa-sign-out" aria-hidden="true"></i>Log out</a></li>
 
                             </ul>

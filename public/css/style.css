@@ -11246,7 +11246,7 @@ input[type=file]::file-selector-button:hover {
     color: red
 }
 
-.profile-image {
+/* .profile-image {
     border-radius: 50%;
     border: 2px solid #ccc
-}
+} */

@@ -42,7 +42,7 @@
                                         <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="password" required>
                                     </div>
 
-                                    <div class="form-group">
+                                    {{-- <div class="form-group">
                                         <x-turnstile
                                             data-action="login"
                                             data-cdata="sessionid-123456789"
@@ -52,7 +52,7 @@
                                             data-theme="light"
                                             data-tabindex="1"
                                         />
-                                    </div>
+                                    </div> --}}
 
 
                                     @if ($errors->any())

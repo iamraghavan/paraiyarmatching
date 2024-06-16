@@ -19,6 +19,8 @@
 
 
 
+
+
     </head>
     <body>
 
@@ -98,42 +100,43 @@
         @endif
 
         <script>
-            // Get the elements
-            const dobInput = document.getElementById('dob');
-            const ageInput = document.getElementById('age');
 
-            // Add event listener for date of birth change
-            dobInput.addEventListener('change', function() {
-                // Calculate age
-                const dob = new Date(this.value);
-                const today = new Date();
-                const age = today.getFullYear() - dob.getFullYear();
+const dobInput = document.getElementById('dob');
+const ageInput = document.getElementById('age');
 
-                // Check if the birthday hasn't occurred yet this year
-                if (today.getMonth() < dob.getMonth() || (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())) {
-                    age--;
-                }
+// Add event listener for date of birth change
+dobInput.addEventListener('change', function() {
+    // Calculate age
+    let dob = new Date(this.value);
+    let today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
 
-                // Update the age input value
-                ageInput.value = age;
+    // Check if the birthday hasn't occurred yet this year
+    if (today.getMonth() < dob.getMonth() || (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())) {
+        age--;
+    }
 
-                // Check if the user is below 18 years old
-                if (age < 18) {
-                    // Show a confirmation message before logout
-                    Swal.fire({
-                        title: 'You are below 18 years old.',
-                        text: 'You will be logged out in 2 seconds | You are not allowed to continue with your profile.',
-                        icon: 'warning',
-                        timer: 2000,
-                        timerProgressBar: true,
-                        showConfirmButton: false,
-                        willClose: () => {
-                            // Perform logout after confirmation message is closed
-                            window.location.href = '/app/logout';
-                        }
-                    });
-                }
-            });
+    // Update the age input value
+    ageInput.value = age;
+
+    // Check if the user is below 18 years old
+    if (age < 18) {
+        // Show a confirmation message before logout
+        Swal.fire({
+            title: 'You are below 18 years old.',
+            text: 'You will be logged out in 2 seconds | You are not allowed to continue with your profile.',
+            icon: 'warning',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            willClose: () => {
+                // Perform logout after confirmation message is closed
+                window.location.href = '/app/logout';
+            }
+        });
+    }
+});
+
         </script>
 
 
@@ -183,12 +186,24 @@
     }
 
     // Attach event listener for form submission
-    document.querySelector('form').addEventListener('submit', function(event) {
+    const form = document.querySelector('form');
+if (form) {
+    form.addEventListener('submit', function(event) {
         if (!validateForm()) {
             // Prevent form submission if validation fails
             event.preventDefault();
         }
     });
+} else {
+    console.error('Form element not found. Event listener not added.');
+}
+
+// Function to validate the form
+function validateForm() {
+    // Add your form validation logic here
+    // Return true if the form is valid, false otherwise
+    return true; // Placeholder, replace with actual validation logic
+}
 </script>
 
 @turnstileScripts()

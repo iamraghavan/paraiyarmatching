@@ -6,16 +6,31 @@ use App\Models\PhotoGallery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Profile;
 
 class GalleryController extends Controller
 {
     public function show_upload()
     {
+
+        if (!Auth::check()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+
+
+
+        // Retrieve the profile associated with the authenticated user
+
         if (Auth::check()) {
+
+
             // Fetch the authenticated user
             $user = Auth::user();
             $images = PhotoGallery::where('user_pmid', $user->pmid)->get();
-            return view('pages.dashboard.pages.upload-photo-gallery', compact('images', 'user'));
+            $profile = Profile::where('user_pmid', $user->pmid)->first();
+
+            return view('pages.dashboard.pages.upload-photo-gallery', compact('images', 'user', 'profile'));
         }
         return redirect()->route('login'); // Redirect to login if not authenticated
     }

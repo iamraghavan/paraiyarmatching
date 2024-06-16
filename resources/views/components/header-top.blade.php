@@ -36,26 +36,28 @@
                 <div class="lhs">
                     <ul>
 
-                        <li><a href="{{ url("about.html") }}">About</a></li>
-                        <li><a href="{{ url("faq.html") }}">FAQ</a></li>
-                        <li><a href="{{ url("contact.html") }}">Contact</a></li>
+                        @if(isset($ipInfo['error']))
+                        <li><a href="{{ $ipInfo['error'] }}">{{ $ipInfo['error'] }}</a></li>
+                        @else
+                        <li><a href="{{ $ipInfo['ip'] }}">{{ $ipInfo['ip'] }}</a></li>
+                        @endif
+
+
+
                     </ul>
                 </div>
                 <div class="rhs">
                     <ul>
-                        <li><a href="{{ url("tel:+9704462944") }}"><i class="fa fa-phone" aria-hidden="true"></i>&nbsp;+01 5312
-                                5312</a></li>
-                        <li><a href="{{ url("mailto:info@example.com") }}"><i class="fa fa-envelope-o"
-                                    aria-hidden="true"></i>&nbsp; help@company.com</a></li>
-                        <li><a href="{{ url("#!") }}"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                        <li><a href="{{ url("#!") }}"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-                        <li><a href="{{ url("#!") }}"><i class="fa fa-whatsapp" aria-hidden="true"></i></a></li>
+                        <li><a><span id="datetimes" style="display: inline;"></span></a></li>
+
                     </ul>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
 
 
 <div class="hom-top">
@@ -74,13 +76,7 @@
                 <!-- EXPLORE MENU -->
                 <div class="bl">
                     <ul>
-                        @if(auth()->check())
-                            @if(isset($ipInfo['error']))
-                                <p>Error fetching IP information: {{ $ipInfo['error'] }}</p>
-                            @else
-                                <li><p>{{ $ipInfo['ip'] }}</p></li>
-                            @endif
-                        @else
+
                         <li class="smenu-pare">
                             <span class="smenu">Partner Search</span>
                             <div class="smenu-open smenu-box">
@@ -109,10 +105,11 @@
                             </div>
                         </li>
 
-                            <li><a href="{{ url("sign-up.html") }}">Contact</a></li>
-                            <li><a href="{{ url("sign-up.html") }}">Take a Tour</a></li>
-                            <li><a href="{{ url("sign-up.html") }}">Help</a></li>
-                        @endif
+
+                            <li><a href="{{ url("#") }}">Take a Tour</a></li>
+
+                            <li><a href="{{ url("/membership/package") }}">Membership Package</a></li>
+
 
                         @if(auth()->check())
                             <li><a onclick="confirmLogout()">Logout</a></li>
@@ -122,12 +119,13 @@
                         @endif
                     </ul>
                 </div>
-
+                <div class="al">
                 <!-- USER PROFILE -->
                 @if(auth()->check())
 
+                <a href="{{url('/app/profile/dashboard')}}" rel="noopener noreferrer" name={{auth()->user()->name}} target="_parent" referrerpolicy="no-referrer strict-origin-when-cross-origin">
                     <div class="desktop-view"> <!-- Add a class for desktop view -->
-                        <div class="">
+
                             <div class="head-pro">
 
                                 <b>{{ auth()->user()->name }}</b><br>
@@ -135,17 +133,22 @@
                                 <span class="fclick"></span>
 
                             </div>
-                        </div>
+
                     </div>
 
+                </a>
+
             @else
-                <div class="al">
+
                     <div class="head-pro">
                         {{-- <img src="{{ asset("/images/profiles/1.jpg") }}" alt="" loading="lazy"> --}}
                         <b><h6 id="datetimes" style="display: inline;"></h6></b><br>
                     </div>
-                </div>
+
             @endif
+        </div>
+
+
 
 
 

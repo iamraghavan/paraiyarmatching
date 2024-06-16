@@ -23,14 +23,14 @@ class RegisterController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
                 'gender' => 'required|in:male,female',
-                'email' => 'required|string|email|max:255|unique:users',
-                'phone' => 'required|string|max:20|unique:users',
+                'email' => 'required|string|email|max:255|unique:users,email',
+                'phone' => 'required|string|max:20|unique:users,phone',
                 'password' => 'required|string|min:8',
                 'agree' => 'required|accepted',
             ]);
 
             if ($validator->fails()) {
-                throw new \Exception('Validation failed', 422);
+                return redirect()->back()->withInput()->withErrors($validator);
             }
 
             // Generate unique PMID
@@ -50,19 +50,16 @@ class RegisterController extends Controller
             // Send welcome email
             Mail::to($user->email)->queue(new WelcomeMail($user));
 
-            // Show success message using SweetAlert
+            // Show success message
             return redirect()->route('login')->with('success', 'Account created successfully! Welcome to our platform.');
         } catch (\Exception $e) {
-            // Show validation errors using Toastr.js
-            if ($e->getCode() === 422) {
-                $errors = collect($validator->errors()->all())->implode('<br>');
-                return redirect()->back()->withInput()->with('error', $errors);
-            }
+            // Log the error for debugging
 
-            // Handle other exceptions
-            return redirect()->back()->withInput()->with('error', 'An error occurred while processing your request.');
+            // Return a generic error message to the user
+            return redirect()->back()->withInput()->with('error', 'An error occurred while processing your request. Please try again later.');
         }
     }
+
 
 
     // Function to generate unique PMID

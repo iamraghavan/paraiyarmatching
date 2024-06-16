@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Profile;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
@@ -30,7 +31,7 @@ class ProfileController extends Controller
             'annual_income' => 'nullable|string',
             'work_location' => 'nullable|string',
             'residing_state' => 'nullable|string',
-            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:512',
         ]);
 
         // Retrieve the authenticated user
@@ -63,6 +64,43 @@ class ProfileController extends Controller
         $profile->save();
 
         // Redirect back with a success message
+        return redirect()->route('dashboard')->with('success', 'Profile updated successfully!');
+    }
+
+
+    public function updatePersonalData(Request $request)
+    {
+        // Define validation rules
+        $rules = [
+            'bio' => 'required|string|min:500|max:700',
+            'user_pmid' => 'required|exists:users,pmid'
+        ];
+
+        // Custom error messages
+        $messages = [
+            'bio.required' => 'Bio is required.',
+            'bio.min' => 'Bio must be at least 500 characters.',
+            'bio.max' => 'Bio may not be greater than 700 characters.',
+            'user_pmid.required' => 'User PM ID is required.',
+            'user_pmid.exists' => 'Invalid User PM ID.'
+        ];
+
+        // Validate the request
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        // If validation fails, return to the form with errors
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Find the user by PM ID
+        $profile = Profile::firstOrNew(['user_pmid' => $request->user_pmid]);
+
+        // Update the user's bio
+        $profile->my_bio = $request->input('bio');
+        $profile->save();
+
+        // Redirect to a success page
         return redirect()->route('dashboard')->with('success', 'Profile updated successfully!');
     }
 }

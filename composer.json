@@ -12,6 +12,7 @@
         "kreait/laravel-firebase": "^5.8",
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
+        "qcod/laravel-imageup": "^1.2",
         "ryangjchandler/laravel-cloudflare-turnstile": "^1.1"
     },
     "require-dev": {

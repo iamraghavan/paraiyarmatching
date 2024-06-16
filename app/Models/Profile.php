@@ -29,6 +29,7 @@ class Profile extends Model
         'residing_state',
         'profile_image',
         'horoscope_url',
+        'my_bio',
 
     ];
 }
