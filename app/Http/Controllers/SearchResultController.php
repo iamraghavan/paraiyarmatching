@@ -67,6 +67,8 @@ class SearchResultController extends Controller
 
         // Get the filtered results
         $results = $query->select('users.*', 'profiles.*')->distinct()->get();
+        
+
 
         // Return the filtered results as a view
         return view('pages.search-results', compact('results'));

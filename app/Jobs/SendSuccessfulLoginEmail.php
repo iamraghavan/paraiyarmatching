@@ -2,7 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Mail\SuccessfulLoginEmail;
+use App\Mail\SuccessfulLoginNotification;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,17 +15,22 @@ class SendSuccessfulLoginEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $userEmail;
+    protected $userId;
+    protected $loginTime;
+    protected $browserInfo;
 
     /**
      * Create a new job instance.
      *
-     * @param string $userEmail
-     * @return void
+     * @param int $userId
+     * @param string $loginTime
+     * @param string $browserInfo
      */
-    public function __construct($userEmail)
+    public function __construct($userId, $loginTime, $browserInfo)
     {
-        $this->userEmail = $userEmail;
+        $this->userId = $userId;
+        $this->loginTime = $loginTime;
+        $this->browserInfo = $browserInfo;
     }
 
     /**
@@ -34,7 +40,12 @@ class SendSuccessfulLoginEmail implements ShouldQueue
      */
     public function handle()
     {
-        // Pass $this->userEmail to the constructor of SuccessfulLoginEmail
-        Mail::to($this->userEmail)->send(new SuccessfulLoginEmail($this->userEmail));
+        // Fetch the user from the database
+        $user = User::find($this->userId);
+
+        if ($user) {
+            Mail::to($user->email)
+                ->send(new SuccessfulLoginNotification($this->loginTime, $this->browserInfo));
+        }
     }
 }

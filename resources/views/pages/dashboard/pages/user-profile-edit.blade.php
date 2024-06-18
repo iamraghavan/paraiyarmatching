@@ -33,7 +33,7 @@
 
                                 <li><a href="{{url('/app/gallery/upload')}}"><i class="fa fa-upload" aria-hidden="true"></i>Upload Gallery</a></li>
                                 <li><a href="{{url('/app/horoscope/upload')}}"><i class="fa fa-upload" aria-hidden="true"></i>Upload Horoscope</a></li>
-                                <li><a href="{{url('/')}}"><i class="fa fa-money" aria-hidden="true"></i>Plan</a></li>
+                                <li><a href="{{url('/app/f/'. $user->pmid .'/membership-plan')}}"><i class="fa fa-money" aria-hidden="true"></i>Plan</a></li>
                                     @php
                                     function generateRandomString($length = 100) {
                                         return substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', $length)), 0, $length);

@@ -13,6 +13,7 @@
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
         "qcod/laravel-imageup": "^1.2",
+        "romanzipp/laravel-seo": "^2.7",
         "ryangjchandler/laravel-cloudflare-turnstile": "^1.1"
     },
     "require-dev": {

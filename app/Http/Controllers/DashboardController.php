@@ -7,6 +7,16 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 // use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Illuminate\Support\Facades\Http;
+use App\Models\UserPayment;
+
+use romanzipp\Seo\Facades\Seo;
+use romanzipp\Seo\Services\SeoService;
+
+$seo = seo();
+
+$seo = app(SeoService::class);
+
+$seo = Seo::make();
 
 
 class DashboardController extends Controller
@@ -20,6 +30,8 @@ class DashboardController extends Controller
         }
 
 
+
+
         if (Auth::check()) {
 
             if (!Auth::check()) {
@@ -30,6 +42,28 @@ class DashboardController extends Controller
             $user = Auth::user();
 
             $ipInfo = $this->fetch_ip();
+
+            seo()->addFromArray([
+                'title' => ucwords(strtolower($user->name)) . ' ' . $user->pmid . ' ' . 'Paraiyar Matching - Matchfinder is a matchmaking portal for brides and grooms',
+                'description' => 'Paraiyar Matching: No. 1 site for Tamil Brides & Grooms. Trusted globally. Register free!',
+                'meta' => [
+                    [
+                        'name' => 'author',
+                        'content' => 'Raghavan Jeeva',
+                    ],
+                    [
+                        'name' => 'site_name',
+                        'content' => 'Paraiyar Matching' . ' ' . ucwords(strtolower($user->name)),
+                    ],
+                ],
+                'twitter' => [
+                    'card' => 'summary',
+                ],
+                'og' => [
+                    'site_name' => 'Paraiyar Matching',
+                ],
+
+            ]);
 
             // Retrieve the profile associated with the authenticated user
             $profile = Profile::where('user_pmid', $user->pmid)->first();
@@ -45,6 +79,8 @@ class DashboardController extends Controller
             if ($profile) {
                 // Calculate profile completion percentage
                 $completionPercentage = $this->calculateProfileCompletion($profile);
+
+
 
                 // Redirect based on completion percentage
                 if ($completionPercentage >= 100) {
@@ -99,6 +135,29 @@ class DashboardController extends Controller
             // If authenticated, fetch the authenticated user
             $user = Auth::user();
 
+            seo()->addFromArray([
+                'title' => ucwords(strtolower($user->name)) . ' ' . $user->pmid . ' ' . 'Paraiyar Matching - Matchfinder is a matchmaking portal for brides and grooms',
+                'description' => 'Paraiyar Matching: No. 1 site for Tamil Brides & Grooms. Trusted globally. Register free!',
+                'meta' => [
+                    [
+                        'name' => 'author',
+                        'content' => 'Raghavan Jeeva',
+                    ],
+                    [
+                        'name' => 'site_name',
+                        'content' => 'Paraiyar Matching' . ' ' . ucwords(strtolower($user->name)),
+                    ],
+                ],
+                'twitter' => [
+                    'card' => 'summary',
+                ],
+                'og' => [
+                    'site_name' => 'Paraiyar Matching',
+                ],
+
+            ]);
+
+
             // Retrieve the profile associated with the authenticated user
             $profile = Profile::where('user_pmid', $user->pmid)->first();
 
@@ -118,6 +177,29 @@ class DashboardController extends Controller
             // If authenticated, fetch the authenticated user
             $user = Auth::user();
 
+            seo()->addFromArray([
+                'title' => ucwords(strtolower($user->name)) . ' ' . $user->pmid . ' ' . 'Paraiyar Matching - Matchfinder is a matchmaking portal for brides and grooms',
+                'description' => 'Paraiyar Matching: No. 1 site for Tamil Brides & Grooms. Trusted globally. Register free!',
+                'meta' => [
+                    [
+                        'name' => 'author',
+                        'content' => 'Raghavan Jeeva',
+                    ],
+                    [
+                        'name' => 'site_name',
+                        'content' => 'Paraiyar Matching' . ' ' . ucwords(strtolower($user->name)),
+                    ],
+                ],
+                'twitter' => [
+                    'card' => 'summary',
+                ],
+                'og' => [
+                    'site_name' => 'Paraiyar Matching',
+                ],
+
+            ]);
+
+
             // Retrieve the profile associated with the authenticated user
             $profile = Profile::where('user_pmid', $user->pmid)->first();
 
@@ -135,6 +217,29 @@ class DashboardController extends Controller
         $profile = Profile::where('user_id', $id)->first(); // Assuming you have a 'user_id' column in your profiles table
 
         if ($profile) {
+
+            seo()->addFromArray([
+                'title' => ucwords(strtolower($user->name)) . ' ' . $user->pmid . ' ' . 'Paraiyar Matching - Matchfinder is a matchmaking portal for brides and grooms',
+                'description' => 'Paraiyar Matching: No. 1 site for Tamil Brides & Grooms. Trusted globally. Register free!',
+                'meta' => [
+                    [
+                        'name' => 'author',
+                        'content' => 'Raghavan Jeeva',
+                    ],
+                    [
+                        'name' => 'site_name',
+                        'content' => 'Paraiyar Matching' . ' ' . ucwords(strtolower($user->name)),
+                    ],
+                ],
+                'twitter' => [
+                    'card' => 'summary',
+                ],
+                'og' => [
+                    'site_name' => 'Paraiyar Matching',
+                ],
+
+            ]);
+
             return view('user-profile-edit', compact('user', 'profile'));
         } else {
             return redirect()->route('user-profile-edit', ['id' => $user->pmid])->with('info', 'Could you please provide the missing data to complete your profile?');
@@ -146,6 +251,27 @@ class DashboardController extends Controller
             $user = Auth::user();
             $profile = Profile::where('user_pmid', $user->pmid)->first();
 
+            seo()->addFromArray([
+                'title' => ucwords(strtolower($user->name)) . ' ' . $user->pmid . ' ' . 'Paraiyar Matching - Matchfinder is a matchmaking portal for brides and grooms',
+                'description' => 'Paraiyar Matching: No. 1 site for Tamil Brides & Grooms. Trusted globally. Register free!',
+                'meta' => [
+                    [
+                        'name' => 'author',
+                        'content' => 'Raghavan Jeeva',
+                    ],
+                    [
+                        'name' => 'site_name',
+                        'content' => 'Paraiyar Matching' . ' ' . ucwords(strtolower($user->name)),
+                    ],
+                ],
+                'twitter' => [
+                    'card' => 'summary',
+                ],
+                'og' => [
+                    'site_name' => 'Paraiyar Matching',
+                ],
+
+            ]);
 
 
             if ($profile) {
@@ -160,7 +286,58 @@ class DashboardController extends Controller
     }
 
 
+    public function membershipPlan($id)
+    {
 
+        if (Auth::check()) {
+
+            if (!Auth::check()) {
+                abort(403, 'Unauthorized action.');
+            }
+
+
+
+            $user = Auth::user();
+
+            seo()->addFromArray([
+                'title' => ucwords(strtolower($user->name)) . ' ' . $user->pmid . ' ' . 'Paraiyar Matching - Matchfinder is a matchmaking portal for brides and grooms',
+                'description' => 'Paraiyar Matching: No. 1 site for Tamil Brides & Grooms. Trusted globally. Register free!',
+                'meta' => [
+                    [
+                        'name' => 'author',
+                        'content' => 'Raghavan Jeeva',
+                    ],
+                    [
+                        'name' => 'site_name',
+                        'content' => 'Paraiyar Matching' . ' ' . ucwords(strtolower($user->name)),
+                    ],
+                ],
+                'twitter' => [
+                    'card' => 'summary',
+                ],
+                'og' => [
+                    'site_name' => 'Paraiyar Matching',
+                ],
+
+            ]);
+
+
+            if (Auth()->user()->pmid == $id) {
+                $profile = Profile::where('user_pmid', $user->pmid)->first();
+                $user = Profile::where('user_pmid', $id)->first();
+                $userPayment = UserPayment::where('user_pmid', $id)->first();
+
+                // Check if the user has a free membership
+                $isFreeMembership = false;
+                if ($userPayment) {
+                    if ($userPayment->package_details == '0 Months' && $userPayment->paid_status == 0) {
+                        $isFreeMembership = true;
+                    }
+                }
+                return view('pages.dashboard.pages.plan', ['user' => $user, 'profile' => $profile, 'userPayment' => $userPayment, 'isFreeMembership' => $isFreeMembership]);
+            }
+        }
+    }
 
 
     /* IP Value Get */

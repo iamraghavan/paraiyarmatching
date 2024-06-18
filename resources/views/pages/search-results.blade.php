@@ -102,33 +102,41 @@
                     <div class="all-list-sh">
                         <ul>
                             @foreach($results as $user)
-                                <li>
-                                    <a href="{{ route('user-profile', $user->user_pmid) }}">
+                            <li>
+                                <a href="{{ route('user-profile', $user->user_pmid) }}">
                                     <div class="all-pro-box">
                                         <div class="pro-img">
                                             <a href="{{ route('user-profile', $user->user_pmid) }}">
-                                                <img src="{{asset($user->profile_image)}}" alt="">
+                                                <img src="{{ asset($user->profile_image) }}" alt="{{ $user->name }}" style="  width: 50%;
+            height: auto;
+            object-fit: cover;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            top: 50%;">
                                             </a>
                                         </div>
                                         <div class="pro-detail">
                                             <h4><a href="{{ route('user-profile', $user->user_pmid) }}">{{ $user->name }}</a></h4>
                                             <div class="pro-bio">
-                                                <span>{{$user->religion}}</span>
-                                                <span>{{$user->family_type}}</span>
-                                                <span>{{$user->age }} Years old</span>
-
+                                                <span>{{ $user->religion }}</span>
+                                                <span>{{ $user->family_type }}</span>
+                                                <span>{{ $user->age }} Years old</span>
                                             </div>
                                             <div class="links">
-
-
                                                 <a href="#!" class="cta cta-sendint" data-bs-toggle="modal" data-bs-target="#sendInter">Send interest</a>
                                                 <a href="{{ route('user-profile', $user->user_pmid) }}">More details</a>
                                             </div>
                                         </div>
-                                        <span class="enq-sav" data-toggle="tooltip" title="Click to save this profile."><i class="fa fa-thumbs-o-up" aria-hidden="true"></i></span>
+                                        <span class="enq-sav" data-toggle="tooltip" title="Click to save this profile.">
+                                            <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                                        </span>
                                     </div>
                                 </a>
-                                </li>
+
+                            </li>
+
                             @endforeach
                         </ul>
                     </div>

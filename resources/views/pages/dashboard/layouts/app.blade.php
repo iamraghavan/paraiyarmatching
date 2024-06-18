@@ -3,8 +3,21 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="index, follow">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>{{ $user->name }} - {{ $user->pmid }} - Paraiyar Matching - Matchfinder for brides and grooms </title>
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#404040">
+        <meta name="apple-mobile-web-app-title" content="Paraiyar Matching">
+        <meta name="application-name" content="Paraiyar Matching">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="theme-color" content="#ffffff">
+        {{-- <title>Paraiyar Matching - Matchfinder is a matchmaking portal for brides and grooms </title> --}}
+
+            {{ seo()->render() }}
+        {{-- <title>{{ $user->name }} - {{ $user->pmid }} - Paraiyar Matching - Matchfinder for brides and grooms </title> --}}
 
         {{-- Link & Style --}}
 

@@ -22,5 +22,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Blade::component('loader', \App\View\Components\Loader::class);
         Blade::component('header-top', \App\View\Components\HeaderTop::class);
+        Blade::component('related-profile-card', \App\View\Components\RelatedProfileCard::class);
     }
 }

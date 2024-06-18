@@ -32,4 +32,9 @@ class Profile extends Model
         'my_bio',
 
     ];
+
+    public function photo_gallery()
+    {
+        return $this->hasMany(PhotoGallery::class, 'user_pmid', 'user_pmid');
+    }
 }

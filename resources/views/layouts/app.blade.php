@@ -3,15 +3,80 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="index, follow">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>Paraiyar Matching - Matchfinder is a matchmaking portal for brides and grooms </title>
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#404040">
+        <meta name="apple-mobile-web-app-title" content="Paraiyar Matching">
+        <meta name="application-name" content="Paraiyar Matching">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" href="{{ asset("/css/bootstrap.css") }}">
-    <link rel="stylesheet" href="{{ asset("/css/font-awesome.min.css") }}">
-    <link rel="stylesheet" href="{{ asset("/css/animate.min.css") }}">
-    <link rel="stylesheet" href="{{ asset("/css/style.css") }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
+        {{-- <title>Paraiyar Matching - Matchfinder is a matchmaking portal for brides and grooms </title> --}}
+
+            {{ seo()->render() }}
+
+
+
+            <script type="application/ld+json">
+                {
+                  "@context": "https://schema.org",
+                  "@type": "Organization",
+                  "name": "Paraiyar Matching",
+                  "logo": "{{asset('images/logo-b.png')}}",
+                  "description": "Paraiyar Matching: No. 1 site for Tamil Brides & Grooms. Trusted globally. Register free!",
+                  "contactPoint": {
+                    "@type": "ContactPoint",
+                    "telephone": "918667090188",
+                    "email": "info@paraiyarmatching.com"
+                  }
+                }
+                </script>
+
+
+                <script type="application/ld+json">
+                    {
+                        "@context": "http://schema.org/",
+                        "@type": "LocalBusiness",
+                        "name": "Paraiyar Matching",
+                        "image": "{{asset('images/logo-b.png')}}",
+                        "priceRange": "3000",
+                        "telephone": "918667090188",
+                        "url": "Request::path()",
+                        "address": {
+                            "@type": "PostalAddress",
+                            "streetAddress": "Ambattur Industrial Estate",
+                            "addressLocality": "Chennai",
+                            "addressRegion": "Tamil Nadu",
+                            "postalCode": "600053",
+                            "addressCountry": "IN"
+                        },
+                        "openingHoursSpecification": [
+                            {
+                                "@type": "OpeningHoursSpecification",
+                                "dayOfWeek": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                                "opens": "00:00",
+                                "closes": "12:00"
+                            },
+                            {
+                                "@type": "OpeningHoursSpecification",
+                                "dayOfWeek": [],
+                                "opens": "",
+                                "closes": ""
+                            }
+                        ]
+                    }
+                    </script>
+
+        <link rel="stylesheet" href="{{ asset("/css/bootstrap.css") }}">
+        <link rel="stylesheet" href="{{ asset("/css/font-awesome.min.css") }}">
+        <link rel="stylesheet" href="{{ asset("/css/animate.min.css") }}">
+        <link rel="stylesheet" href="{{ asset("/css/style.css") }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
 
     <style>
           .cta {
