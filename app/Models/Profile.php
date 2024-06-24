@@ -30,7 +30,20 @@ class Profile extends Model
         'profile_image',
         'horoscope_url',
         'my_bio',
+        'number_of_siblings',
+        'siblings',
+        'father_name',
+        'father_occupation',
+        'mother_name',
+        'mother_occupation',
+        'star',
+        'raasi',
+        'dosham',
 
+    ];
+
+    protected $casts = [
+        'siblings' => 'array',
     ];
 
     public function photo_gallery()

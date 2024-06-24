@@ -8,7 +8,25 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HoroscopeController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\SearchResultController;
+use App\Http\Controllers\LoginACValidate;
+
 use Google\ApiCore\Page;
+use Illuminate\Support\Facades\Mail;
+
+use App\Mail\SuccessfulLoginNotification;
+
+Route::get('/test-mail', function () {
+    try {
+        $loginTime = now();
+        $browserInfo = request()->header('User-Agent', 'Test Browser Info');
+        $userEmail = 'raghavanofficials@gmail.com';
+        Mail::to($userEmail)->send(new SuccessfulLoginNotification($loginTime, $browserInfo));
+        return 'Mail sent successfully';
+    } catch (\Exception $e) {
+        return 'Failed to send mail: ' . $e->getMessage();
+    }
+});
+
 
 Route::get('/', [PagesController::class, 'index'])->name('home');
 Route::get('/membership/package', [PagesController::class, 'membership_package'])->name('membership');
@@ -59,3 +77,6 @@ Route::group(['prefix' => 'app/result'], function () {
     Route::get('/search-results', [PagesController::class, 'showSearchResults'])->name('showSearchResult');
     Route::Post('/search-filters', [SearchResultController::class, 'search'])->name('searchFilter');
 });
+
+
+//Admin Dashboard

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use App\Models\PhotoGallery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,16 +10,38 @@ use App\Models\Profile;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Storage;
 use Kreait\Firebase\Exception\FirebaseException;
+use Illuminate\Support\Facades\File;
 
 class GalleryController extends Controller
 {
     protected $firebaseStorage;
 
+    // public function __construct()
+    // {
+    //     $factory = (new Factory)->withServiceAccount(config('services.firebase.credentials'));
+    //     $this->firebaseStorage = $factory->createStorage();
+    // }
+
+
     public function __construct()
     {
-        $factory = (new Factory)->withServiceAccount(config('services.firebase.credentials'));
-        $this->firebaseStorage = $factory->createStorage();
+        try {
+            $credentialsPath = config('services.firebase.credentials');
+            $credentialsContent = File::get($credentialsPath);
+
+            Log::info('Firebase Credentials Path: ' . $credentialsPath);
+            Log::info('Firebase Credentials Content: ' . $credentialsContent);
+
+            $factory = (new Factory)
+                ->withServiceAccount($credentialsPath);
+
+            $this->firebaseStorage = $factory->createStorage();
+        } catch (FirebaseException $e) {
+            Log::error('Firebase initialization error: ' . $e->getMessage());
+            abort(500, 'Could not initialize Firebase');
+        }
     }
+
 
     public function show_upload()
     {

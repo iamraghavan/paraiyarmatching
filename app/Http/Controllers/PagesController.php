@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\LogoutNotification;
 use App\Models\Cities;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,6 +17,7 @@ use App\Models\Profile;
 use romanzipp\Seo\Facades\Seo;
 use romanzipp\Seo\Services\SeoService;
 use App\Jobs\SendSuccessfulLoginEmail;
+use Illuminate\Support\Facades\Log;
 
 
 $seo = seo();
@@ -167,18 +169,21 @@ class PagesController extends Controller
 
         // Attempt to authenticate user
 
-        if (Auth::attempt($validatedData, $request->filled('remember'))) {
-            RateLimiter::clear($key);
+        $credentials = $request->only('email', 'password');
 
-            // Get login time and browser info
-            $loginTime = now(); // Replace with actual login time
-            $browserInfo = $request->header('User-Agent'); // Replace with actual browser info
+        if (Auth::attempt($credentials, $request->filled('remember'))) {
+            $loginTime = now();
+            $browserInfo = $request->header('User-Agent');
+            $userEmail = $credentials['email'];
 
-            // Dispatch job to send successful login email
-            SendSuccessfulLoginEmail::dispatch(Auth::id(), $loginTime, $browserInfo)->onQueue('emails');
+            try {
+                Mail::to($userEmail)->send(new SuccessfulLoginNotification($loginTime, $browserInfo));
 
-            // Redirect user to dashboard
-            return redirect()->route('dashboard');
+                return redirect()->route('dashboard');
+            } catch (\Exception $e) {
+                Log::error('Failed to send login notification email: ' . $e->getMessage());
+                session()->flash('error', 'Login successful but failed to send notification email.');
+            }
         }
 
 

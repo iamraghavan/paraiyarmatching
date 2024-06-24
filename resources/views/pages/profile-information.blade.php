@@ -169,7 +169,39 @@
                                 @if(isset($user->residing_state))
                                     <li><b>Residing State:</b> {{ $user->residing_state }}</li>
                                 @endif
+                                @if(isset($user->number_of_siblings))
+                                <li><b>No of Siblings:</b> {{ $user->number_of_siblings }}</li>
+                            @endif
+
                             </ul>
+
+
+
+
+
+                        @if(isset($user->siblings))
+@php
+$siblings = json_decode($user->siblings, true);
+@endphp
+
+@if(is_array($siblings))
+
+    @foreach($siblings as $sibling)
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <b>Name:</b> {{ $sibling['name'] }}
+            </div>
+            <div class="col-6">
+                <b>Married:</b> {{ $sibling['married'] ? 'Yes' : 'No' }}
+            </div>
+        </div>
+    </div>
+
+    @endforeach
+
+@endif
+@endif
 
 
                         </div>

@@ -16,6 +16,8 @@
         <meta name="theme-color" content="#ffffff">
         {{-- <title>Paraiyar Matching - Matchfinder is a matchmaking portal for brides and grooms </title> --}}
 
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
             {{ seo()->render() }}
         {{-- <title>{{ $user->name }} - {{ $user->pmid }} - Paraiyar Matching - Matchfinder for brides and grooms </title> --}}
 

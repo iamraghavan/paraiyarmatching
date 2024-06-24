@@ -16,8 +16,9 @@ class SuccessfulLoginNotification extends Mailable
     /**
      * Create a new message instance.
      *
-     * @param string $loginTime
-     * @param string $browserInfo
+     * @param  \DateTime  $loginTime
+     * @param  string  $browserInfo
+     * @return void
      */
     public function __construct($loginTime, $browserInfo)
     {
@@ -33,6 +34,10 @@ class SuccessfulLoginNotification extends Mailable
     public function build()
     {
         return $this->markdown('mails.successful_login')
-            ->subject('Login Notification from Paraiyar Matching');
+            ->subject('Login Notification - Paraiyar Matching - Matchfinder is a Matchmaking portal for Brides and Grooms')
+            ->with([
+                'loginTime' => $this->loginTime,
+                'browserInfo' => $this->browserInfo,
+            ]);
     }
 }

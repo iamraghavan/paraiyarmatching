@@ -30,7 +30,20 @@
             <div class="row">
                 <div class="col-md-4 col-lg-3">
                     <div class="db-nav">
-                        <div class="db-nav-pro"><img src="{{url($profile->profile_image)}}" class="img-fluid" alt=""></div>
+                        <div class="db-nav-pro">
+
+                            @if(empty($profile) || empty($profile->profile_image))
+                            @if($user->gender === 'male')
+                                <img id="" src="https://cdn-icons-png.freepik.com/512/11195/11195340.png" alt="Male Profile Image" class="default-profile-image">
+                            @elseif($user->gender === 'female')
+                                <img id="" src="https://cdn-icons-png.freepik.com/512/13979/13979770.png" alt="Female Profile Image" class="default-profile-image">
+                            @endif
+                        @else
+                            <img id="" src="{{ url($profile->profile_image) }}" alt="{{$user->name}}" class="" >
+                        @endif
+
+
+                        </div>
                         <div class="db-nav-list">
                             <ul>
                                 <li><a href="{{url('/app/profile/dashboard')}}" class="act"><i class="fa fa-tachometer" aria-hidden="true"></i>Dashboard</a></li>
@@ -79,19 +92,19 @@
                                     </div>
                                     <div class="fol-sett-box">
                                         <ul>
-                                            <li>
-                                                <div class="sett-lef">
-                                                    <div class="auth-pro-sm sett-pro-wid">
+    <li>
+        <div class="sett-lef">
+            <div class="auth-pro-sm sett-pro-wid">
+                <div class="auth-pro-sm-desc">
+                    <h3 class="text-uppercase">{{ $user->name }}</h3>
 
-                                                        <div class="auth-pro-sm-desc">
-                                                            <h3 class="text-uppercase" >{{ $user->name }}</h3>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                        </ul>
+<p class="text-justify">{{ $profile->my_bio }}</p>
 
                                         <div class="row">
                                             <div class="col-md-6">
@@ -240,8 +253,11 @@
                             </div>
                         </div>
                     </div>
+
+
+
                 </div>
-                <b><h6 id="datetimes" style="display: inline;"></h6></b><br>
+                {{-- <b><h6 id="datetimes" style="display: inline;"></h6></b><br> --}}
             </div>
         </div>
     </div>

@@ -32,6 +32,10 @@ class ProfileController extends Controller
             'work_location' => 'nullable|string',
             'residing_state' => 'nullable|string',
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:512',
+            'father_name' => 'nullable|string',
+            'father_occupation' => 'nullable|string',
+            'mother_name' => 'nullable|string',
+            'mother_occupation' => 'nullable|string',
         ]);
 
         // Retrieve the authenticated user
@@ -73,7 +77,14 @@ class ProfileController extends Controller
         // Define validation rules
         $rules = [
             'bio' => 'required|string|min:500|max:700',
-            'user_pmid' => 'required|exists:users,pmid'
+            'user_pmid' => 'required|exists:users,pmid',
+            'number_of_siblings' => 'required|integer|min:0',
+            'siblings' => 'array',
+            'siblings.*.name' => 'required|string|max:255',
+            'siblings.*.married' => 'required|boolean',
+            'raasi' => 'required|string|max:255',  // New validation rule for raasi
+            'star' => 'required|string|max:255',   // New validation rule for star
+            'dosham' => 'required|string|max:255'  // New validation rule for dosham
         ];
 
         // Custom error messages
@@ -82,7 +93,10 @@ class ProfileController extends Controller
             'bio.min' => 'Bio must be at least 500 characters.',
             'bio.max' => 'Bio may not be greater than 700 characters.',
             'user_pmid.required' => 'User PM ID is required.',
-            'user_pmid.exists' => 'Invalid User PM ID.'
+            'user_pmid.exists' => 'Invalid User PM ID.',
+            'raasi.required' => 'Raasi is required.',  // New custom error message for raasi
+            'star.required' => 'Star is required.',    // New custom error message for star
+            'dosham.required' => 'Dosham is required.' // New custom error message for dosham
         ];
 
         // Validate the request
@@ -94,10 +108,16 @@ class ProfileController extends Controller
         }
 
         // Find the user by PM ID
-        $profile = Profile::firstOrNew(['user_pmid' => $request->user_pmid]);
+        $profile = Profile::where('user_pmid', $request->user_pmid)->firstOrFail();
 
-        // Update the user's bio
+        // Update the profile fields
         $profile->my_bio = $request->input('bio');
+        $profile->number_of_siblings = $request->input('number_of_siblings');
+        $profile->siblings = json_encode($request->input('siblings')); // Save as JSON
+        $profile->raasi = $request->input('raasi');    // Update raasi
+        $profile->star = $request->input('star');      // Update star
+        $profile->dosham = $request->input('dosham');  // Update dosham
+
         $profile->save();
 
         // Redirect to a success page

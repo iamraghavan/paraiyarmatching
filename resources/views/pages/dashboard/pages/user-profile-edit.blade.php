@@ -26,7 +26,20 @@
             <div class="row">
                 <div class="col-md-4 col-lg-3">
                     <div class="db-nav">
-                        <div class="db-nav-pro"><img src="{{url($profile->profile_image)}}" class="img-fluid" alt=""></div>
+                        <div class="db-nav-pro">
+
+                            @if(empty($profile) || empty($profile->profile_image))
+                            @if($user->gender === 'male')
+                                <img id="" src="https://cdn-icons-png.freepik.com/512/11195/11195340.png" alt="Male Profile Image" class="default-profile-image">
+                            @elseif($user->gender === 'female')
+                                <img id="" src="https://cdn-icons-png.freepik.com/512/13979/13979770.png" alt="Female Profile Image" class="default-profile-image">
+                            @endif
+                        @else
+                            <img id="" src="{{ url($profile->profile_image) }}" alt="{{$user->name}}" class="" >
+                        @endif
+
+
+                        </div>
                         <div class="db-nav-list">
                             <ul>
                                 <li><a href="{{url('/app/profile/dashboard')}}" class="act"><i class="fa fa-tachometer" aria-hidden="true"></i>Dashboard</a></li>
@@ -130,16 +143,17 @@
 
                                         </div>
                                         <div class="profile-image-container col-md-6">
-    @if(empty($profile->profile_image))
-        @if($user->gender === 'male')
-            <img id="preview_image" src="https://cdn-icons-png.freepik.com/512/11195/11195340.png" alt="Male Profile Image" class="default-profile-image">
-        @elseif($user->gender === 'female')
-            <img id="preview_image" src="https://cdn-icons-png.freepik.com/512/13979/13979770.png" alt="Female Profile Image" class="default-profile-image">
-        @endif
-    @else
-        <img id="preview_image" src="{{ url($profile->profile_image) }}" alt="{{$user->name}}" class="" >
-    @endif
-</div>
+                                            @if(empty($profile) || empty($profile->profile_image))
+                                                @if($user->gender === 'male')
+                                                    <img id="preview_image" src="https://cdn-icons-png.freepik.com/512/11195/11195340.png" alt="Male Profile Image" class="default-profile-image">
+                                                @elseif($user->gender === 'female')
+                                                    <img id="preview_image" src="https://cdn-icons-png.freepik.com/512/13979/13979770.png" alt="Female Profile Image" class="default-profile-image">
+                                                @endif
+                                            @else
+                                                <img id="preview_image" src="{{ url($profile->profile_image) }}" alt="{{$user->name}}" class="" >
+                                            @endif
+                                        </div>
+
 
                                     </div>
 
@@ -160,6 +174,29 @@
                                     <div class="col-md-6 form-group">
                                         <label class="lb">{{ $user->name }}, your Age is:</label>
                                         <input type="text" class="form-control" id="age" placeholder="Your age" value="{{ old('dob', optional($profile)->age ?? '') }}" readonly name="age">
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-md-6 form-group">
+                                        <label class="lb">Father's Name:</label>
+                                        <input type="text" class="form-control" id="father_name" name="father_name" value="{{ old('father_name', optional($profile)->father_name ?? '') }}">
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        <label class="lb">Father's Occupation:</label>
+                                        <input type="text" class="form-control" id="father_occupation" name="father_occupation" value="{{ old('father_occupation', optional($profile)->father_occupation ?? '') }}">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 form-group">
+                                        <label class="lb">Mother's Name:</label>
+                                        <input type="text" class="form-control" id="mother_name" name="mother_name" value="{{ old('mother_name', optional($profile)->mother_name ?? '') }}">
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        <label class="lb">Mother's Occupation:</label>
+                                        <input type="text" class="form-control" id="mother_occupation" name="mother_occupation" value="{{ old('mother_occupation', optional($profile)->mother_occupation ?? '') }}">
                                     </div>
                                 </div>
 
@@ -424,8 +461,6 @@
         </div>
     </div>
 </section>
-
-
 
 
 

@@ -77,7 +77,7 @@
                 <div class="bl">
                     <ul>
 
-                        <li class="smenu-pare">
+                        {{-- <li class="smenu-pare">
                             <span class="smenu">Partner Search</span>
                             <div class="smenu-open smenu-box">
                                 <div class="container">
@@ -103,7 +103,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </li>
+                        </li> --}}
 
 
                             <li><a href="{{ url("#") }}">Take a Tour</a></li>
