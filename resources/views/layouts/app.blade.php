@@ -18,7 +18,7 @@
         {{-- <title>Paraiyar Matching - Matchfinder is a matchmaking portal for brides and grooms </title> --}}
 
             {{ seo()->render() }}
-
+            <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 
             <script type="application/ld+json">

@@ -5,6 +5,7 @@ Dear {{ $user->name }},
 
 We are delighted to welcome you to our platform. Thank you for joining us!
 
+
 Best regards,<br>
 Paraiyar Matching
 
