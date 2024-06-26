@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
+use App\Mail\SuccessfulLoginEmail;
+use Illuminate\Support\Facades\Mail;
+
+use App\Jobs\SendSuccessfulLoginEmail;
+
 
 class PagesController extends Controller
 {
@@ -37,7 +42,6 @@ class PagesController extends Controller
 
     public function verify_login(Request $request)
     {
-        // Rate limiter key for tracking login attempts
         $key = $request->email . '|' . $request->ip();
 
         // Throttle login attempts by IP address
@@ -58,21 +62,25 @@ class PagesController extends Controller
 
         // Attempt to authenticate user
         if (Auth::attempt($validatedData, $request->filled('remember'))) {
-            // Authentication successful
-            RateLimiter::clear($key); // Clear login attempts
+
+            RateLimiter::clear($key);
+
+            // Dispatch job to send successful login email
+            $userEmail = $request->user()->email;
+            dispatch(new SendSuccessfulLoginEmail($userEmail));
+
             return redirect()->route('dashboard');
         }
 
-        // Authentication failed
-        RateLimiter::hit($key); // Increase login attempt count
+        RateLimiter::hit($key);
 
-        // Check if the user has exceeded the maximum number of login attempts after the current failed attempt
         if (RateLimiter::tooManyAttempts($key, 3)) {
             return back()->withErrors(['email' => 'Too many login attempts. Please try again later.']);
         }
 
         return back()->withErrors(['password' => 'Incorrect password.']);
     }
+
 
 
     public function logout()
