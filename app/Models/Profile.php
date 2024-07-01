@@ -39,6 +39,7 @@ class Profile extends Model
         'star',
         'raasi',
         'dosham',
+        'diet',
 
     ];
 

@@ -9,23 +9,29 @@ use App\Http\Controllers\HoroscopeController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\SearchResultController;
 use App\Http\Controllers\LoginACValidate;
-
+use App\Http\Controllers\OtpController;
+use App\Http\Controllers\VerifyOtpController;
 use Google\ApiCore\Page;
 use Illuminate\Support\Facades\Mail;
-
 use App\Mail\SuccessfulLoginNotification;
+use App\Mail\WelcomeMail;
+
+use App\Models\User;
 
 Route::get('/test-mail', function () {
-    try {
-        $loginTime = now();
-        $browserInfo = request()->header('User-Agent', 'Test Browser Info');
-        $userEmail = 'raghavanofficials@gmail.com';
-        Mail::to($userEmail)->send(new SuccessfulLoginNotification($loginTime, $browserInfo));
-        return 'Mail sent successfully';
-    } catch (\Exception $e) {
-        return 'Failed to send mail: ' . $e->getMessage();
+    $user = User::find(6);
+
+    if (!$user) {
+        return 'User not found!';
     }
+
+    $userName = $user->name;
+    $aadhaarLastFourDigits = substr($user->aadhaar_number, -4);
+
+    Mail::to('raghavanofficials@gmail.com')->queue(new WelcomeMail($userName, $aadhaarLastFourDigits));
+    return 'Mail sent!';
 });
+
 
 
 Route::get('/', [PagesController::class, 'index'])->name('home');
@@ -36,6 +42,15 @@ Route::middleware('guest')->group(function () {
     Route::post('/app/auth/register', [RegisterController::class, 'store'])->name('register');
     Route::get('/app/login', [PagesController::class, 'login'])->name('login');
     Route::post('/app/auth/login', [PagesController::class, 'verify_login'])->name('verify_login');
+    Route::get('/app/ekyc/verification', [PagesController::class, 'ekyc'])->name('aadhaar.photo.update');
+    // Route::post('/app/ekyc/verification/process', [PagesController::class, 'upload'])->name('aadhaar.upload');
+
+
+    // Route::post('/api/verify-otp', [OTPController::class, 'verify']);
+
+
+    Route::post('/send-otp', [VerifyOtpController::class, 'sendOTP']);
+    Route::post('/verify-otp', [VerifyOtpController::class, 'verifyOTP']);
 });
 
 Route::group(['middleware' => ['auth', 'premium']], function () {

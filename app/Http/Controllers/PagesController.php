@@ -18,6 +18,8 @@ use romanzipp\Seo\Facades\Seo;
 use romanzipp\Seo\Services\SeoService;
 use App\Jobs\SendSuccessfulLoginEmail;
 use Illuminate\Support\Facades\Log;
+use thiagoalessio\TesseractOCR\TesseractOCR;
+
 
 
 $seo = seo();
@@ -28,6 +30,13 @@ $seo = Seo::make();
 
 class PagesController extends Controller
 {
+
+
+
+
+
+
+
     public function index()
     {
 
@@ -146,6 +155,11 @@ class PagesController extends Controller
         return view('auth.login');
     }
 
+
+    public function ekyc()
+    {
+        return view('auth.aadhaar-photo');
+    }
 
     public function verify_login(Request $request)
     {

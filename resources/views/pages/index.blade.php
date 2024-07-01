@@ -53,8 +53,7 @@
                                                     <option value="">Religion</option>
                                                     <option value="Any">Any</option>
                                                     <option value="Hindu">Hindu</option>
-                                                    <option value="Muslim">Muslim</option>
-                                                    <option value="Jain">Jain</option>
+                                                    <option value="Buddhist">Buddhist</option>
                                                     <option value="Christian">Christian</option>
                                                 </select>
                                             </div>

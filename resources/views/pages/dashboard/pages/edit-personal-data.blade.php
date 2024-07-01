@@ -96,8 +96,8 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="lb">Bio:</label>
-                                        <textarea class="form-control @error('bio') is-invalid @enderror" placeholder="Enter your Bio (500 to 700 characters)"
-                                            name="bio" required minlength="500" maxlength="700">{{ old('bio', $profile->my_bio ?? '') }}</textarea>
+                                        <textarea class="form-control @error('bio') is-invalid @enderror" placeholder="Enter your Bio"
+                                            name="bio" required>{{ old('bio', $profile->my_bio ?? '') }}</textarea>
                                         @error('bio')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -143,6 +143,28 @@
                                             @enderror
                                         </div>
                                     </div>
+
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-6 form-group">
+                                            <label for="diet">Diet Preference</label>
+                                            <div>
+                                                <label class="diet-option">
+                                                    <input type="radio" name="diet" value="vegetarian" {{ old('diet', $profile->diet) == 'vegetarian' ? 'checked' : '' }}>
+                                                    <i class="fa fa-leaf" aria-hidden="true"></i> Vegetarian
+                                                </label>
+                                                <label class="diet-option">
+                                                    <input type="radio" name="diet" value="non_vegetarian" {{ old('diet', $profile->diet) == 'non_vegetarian' ? 'checked' : '' }}>
+                                                    <i class="fa fa-drumstick-bite" aria-hidden="true"></i> Non-Vegetarian
+                                                </label>
+                                                <label class="diet-option">
+                                                    <input type="radio" name="diet" value="vegan" {{ old('diet', $profile->diet) == 'vegan' ? 'checked' : '' }}>
+                                                    <i class="fa fa-carrot" aria-hidden="true"></i> Vegan
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
 
                                     <script>
                                         // Function to populate stars based on selected Raasi
@@ -286,6 +308,7 @@
     </div>
 </section>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <script>
     $(document).ready(function() {
@@ -319,5 +342,26 @@
         }
     });
 </script>
+<style>
+    .diet-option {
+        display: flex;
+        align-items: center;
+        margin-right: 15px;
+        cursor: pointer;
+    }
 
+    .diet-option i {
+        margin-right: 5px;
+        font-size: 1.5em;
+        color: #6c757d;
+    }
+
+    .diet-option input[type="radio"] {
+        display: none; /* Hide the default radio button */
+    }
+
+    .diet-option input[type="radio"]:checked + i {
+        color: #007bff; /* Change color when the radio button is checked */
+    }
+    </style>
 @endsection

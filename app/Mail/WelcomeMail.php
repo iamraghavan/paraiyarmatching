@@ -2,26 +2,28 @@
 
 namespace App\Mail;
 
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class WelcomeMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user;
+    public $userName;
+    public $aadhaarLastFourDigits;
 
     /**
      * Create a new message instance.
      *
+     * @param  string  $userName
+     * @param  string  $aadhaarLastFourDigits
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct($userName, $aadhaarLastFourDigits)
     {
-        $this->user = $user;
+        $this->userName = $userName;
+        $this->aadhaarLastFourDigits = $aadhaarLastFourDigits;
     }
 
     /**
@@ -31,6 +33,11 @@ class WelcomeMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('mails.welcome')->subject('Welcome to Our Platform!');
+        return $this->markdown('mails.welcome')
+            ->subject('Welcome to Our Platform! - Notification - Paraiyar Matching - Matchfinder is a Matchmaking portal for Brides and Grooms')
+            ->with([
+                'userName' => $this->userName,
+                'aadhaarLastFourDigits' => $this->aadhaarLastFourDigits,
+            ]);
     }
 }

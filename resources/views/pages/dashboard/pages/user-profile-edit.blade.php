@@ -210,20 +210,20 @@
                                        <select class="form-select" name="religion">
     <option hidden>Select Religion</option>
     <option value="Hindu" {{ old('religion', optional($profile)->religion) == 'Hindu' ? 'selected' : '' }}>Hindu</option>
-    <option value="Muslim - All" {{ old('religion', optional($profile)->religion) == 'Muslim - All' ? 'selected' : '' }}>Muslim - All</option>
+    {{-- <option value="Muslim - All" {{ old('religion', optional($profile)->religion) == 'Muslim - All' ? 'selected' : '' }}>Muslim - All</option>
     <option value="Muslim - Shia" {{ old('religion', optional($profile)->religion) == 'Muslim - Shia' ? 'selected' : '' }}>Muslim - Shia</option>
     <option value="Muslim - Sunni" {{ old('religion', optional($profile)->religion) == 'Muslim - Sunni' ? 'selected' : '' }}>Muslim - Sunni</option>
-    <option value="Muslim - Others" {{ old('religion', optional($profile)->religion) == 'Muslim - Others' ? 'selected' : '' }}>Muslim - Others</option>
+    <option value="Muslim - Others" {{ old('religion', optional($profile)->religion) == 'Muslim - Others' ? 'selected' : '' }}>Muslim - Others</option> --}}
     <option value="Christian" {{ old('religion', optional($profile)->religion) == 'Christian' ? 'selected' : '' }}>Christian</option>
-    <option value="Sikh" {{ old('religion', optional($profile)->religion) == 'Sikh' ? 'selected' : '' }}>Sikh</option>
+    {{-- <option value="Sikh" {{ old('religion', optional($profile)->religion) == 'Sikh' ? 'selected' : '' }}>Sikh</option>
     <option value="Jain - All" {{ old('religion', optional($profile)->religion) == 'Jain - All' ? 'selected' : '' }}>Jain - All</option>
     <option value="Jain - Digambar" {{ old('religion', optional($profile)->religion) == 'Jain - Digambar' ? 'selected' : '' }}>Jain - Digambar</option>
     <option value="Jain - Shwetambar" {{ old('religion', optional($profile)->religion) == 'Jain - Shwetambar' ? 'selected' : '' }}>Jain - Shwetambar</option>
     <option value="Jain - Others" {{ old('religion', optional($profile)->religion) == 'Jain - Others' ? 'selected' : '' }}>Jain - Others</option>
-    <option value="Parsi" {{ old('religion', optional($profile)->religion) == 'Parsi' ? 'selected' : '' }}>Parsi</option>
+    <option value="Parsi" {{ old('religion', optional($profile)->religion) == 'Parsi' ? 'selected' : '' }}>Parsi</option> --}}
     <option value="Buddhist" {{ old('religion', optional($profile)->religion) == 'Buddhist' ? 'selected' : '' }}>Buddhist</option>
-    <option value="Jewish" {{ old('religion', optional($profile)->religion) == 'Jewish' ? 'selected' : '' }}>Jewish</option>
-    <option value="Inter-Religion" {{ old('religion', optional($profile)->religion) == 'Inter-Religion' ? 'selected' : '' }}>Inter-Religion</option>
+    {{-- <option value="Jewish" {{ old('religion', optional($profile)->religion) == 'Jewish' ? 'selected' : '' }}>Jewish</option>
+    <option value="Inter-Religion" {{ old('religion', optional($profile)->religion) == 'Inter-Religion' ? 'selected' : '' }}>Inter-Religion</option> --}}
     <option value="No Religious Belief" {{ old('religion', optional($profile)->religion) == 'No Religious Belief' ? 'selected' : '' }}>No Religious Belief</option>
 </select>
 
@@ -434,14 +434,17 @@
                                     <div class="col-md-6 form-group">
                                         <!-- Work Location -->
                                         <label class="lb">Work Location:</label>
-                                        <input type="text" class="form-control" name="work_location" value="{{ old('work_location', optional($profile)->work_location ?? '') }}">
+                                        <input type="text" class="form-control" name="work_location" id="work_location" value="{{ old('work_location', optional($profile)->work_location ?? '') }}">
+                                        <ul id="work_location_suggestions" class="suggestions"></ul>
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <!-- Residing State -->
-                                        <label class="lb">Residing State:</label>
-                                        <input type="text" class="form-control" name="residing_state" value="{{ old('residing_state', optional($profile)->residing_state ?? '') }}">
+                                        <label class="lb">Residing City:</label>
+                                        <input type="text" class="form-control" name="residing_state" id="residing_state" value="{{ old('residing_state', optional($profile)->residing_state ?? '') }}">
+                                        <ul id="residing_state_suggestions" class="suggestions"></ul>
                                     </div>
                                 </div>
+
 
 
 
@@ -462,6 +465,98 @@
     </div>
 </section>
 
+<style>
+    .suggestions {
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    background: white;
+    z-index: 1000;
+}
+
+.suggestions li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.suggestions li:hover {
+    background-color: #f0f0f0;
+}
+
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const workLocationInput = document.getElementById('work_location');
+    const residingStateInput = document.getElementById('residing_state');
+    const workLocationSuggestions = document.getElementById('work_location_suggestions');
+    const residingStateSuggestions = document.getElementById('residing_state_suggestions');
+
+    function fetchSuggestions(query, suggestionsElement, inputElement) {
+        axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${query}&addressdetails=1`)
+            .then(response => {
+                const suggestions = response.data;
+                suggestionsElement.innerHTML = '';
+
+                suggestions.forEach(suggestion => {
+                    let displayName = '';
+
+                    if (suggestion.address.city) {
+                        displayName = suggestion.address.city;
+                    } else if (suggestion.address.town) {
+                        displayName = suggestion.address.town;
+                    } else if (suggestion.address.village) {
+                        displayName = suggestion.address.village;
+                    } else if (suggestion.address.county) {
+                        displayName = suggestion.address.county;
+                    }
+
+                    if (displayName) {
+                        const li = document.createElement('li');
+                        li.textContent = displayName;
+                        li.addEventListener('click', function () {
+                            inputElement.value = displayName;
+                            suggestionsElement.innerHTML = '';
+                        });
+                        suggestionsElement.appendChild(li);
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching suggestions:', error));
+    }
+
+    workLocationInput.addEventListener('input', function () {
+        if (this.value.length > 2) {
+            fetchSuggestions(this.value, workLocationSuggestions, workLocationInput);
+        } else {
+            workLocationSuggestions.innerHTML = '';
+        }
+    });
+
+    residingStateInput.addEventListener('input', function () {
+        if (this.value.length > 2) {
+            fetchSuggestions(this.value, residingStateSuggestions, residingStateInput);
+        } else {
+            residingStateSuggestions.innerHTML = '';
+        }
+    });
+
+    document.addEventListener('click', function (event) {
+        if (!workLocationInput.contains(event.target) && !workLocationSuggestions.contains(event.target)) {
+            workLocationSuggestions.innerHTML = '';
+        }
+        if (!residingStateInput.contains(event.target) && !residingStateSuggestions.contains(event.target)) {
+            residingStateSuggestions.innerHTML = '';
+        }
+    });
+});
+</script>
 
 
 @endsection

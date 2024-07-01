@@ -76,15 +76,16 @@ class ProfileController extends Controller
     {
         // Define validation rules
         $rules = [
-            'bio' => 'required|string|min:500|max:700',
+            'bio' => 'required|string',
             'user_pmid' => 'required|exists:users,pmid',
             'number_of_siblings' => 'required|integer|min:0',
             'siblings' => 'array',
             'siblings.*.name' => 'required|string|max:255',
             'siblings.*.married' => 'required|boolean',
-            'raasi' => 'required|string|max:255',  // New validation rule for raasi
-            'star' => 'required|string|max:255',   // New validation rule for star
-            'dosham' => 'required|string|max:255'  // New validation rule for dosham
+            'raasi' => 'required|string|max:255',
+            'star' => 'required|string|max:255',
+            'dosham' => 'required|string|max:255',
+            'diet' => 'nullable|in:vegetarian,non_vegetarian,vegan',
         ];
 
         // Custom error messages
@@ -94,9 +95,10 @@ class ProfileController extends Controller
             'bio.max' => 'Bio may not be greater than 700 characters.',
             'user_pmid.required' => 'User PM ID is required.',
             'user_pmid.exists' => 'Invalid User PM ID.',
-            'raasi.required' => 'Raasi is required.',  // New custom error message for raasi
-            'star.required' => 'Star is required.',    // New custom error message for star
-            'dosham.required' => 'Dosham is required.' // New custom error message for dosham
+            'raasi.required' => 'Raasi is required.',
+            'star.required' => 'Star is required.',
+            'dosham.required' => 'Dosham is required.',
+            'diet.in' => 'Invalid diet option.'
         ];
 
         // Validate the request
@@ -113,10 +115,11 @@ class ProfileController extends Controller
         // Update the profile fields
         $profile->my_bio = $request->input('bio');
         $profile->number_of_siblings = $request->input('number_of_siblings');
-        $profile->siblings = json_encode($request->input('siblings')); // Save as JSON
-        $profile->raasi = $request->input('raasi');    // Update raasi
-        $profile->star = $request->input('star');      // Update star
-        $profile->dosham = $request->input('dosham');  // Update dosham
+        $profile->siblings = json_encode($request->input('siblings'));
+        $profile->raasi = $request->input('raasi');
+        $profile->star = $request->input('star');
+        $profile->dosham = $request->input('dosham');
+        $profile->diet = $request->input('diet');
 
         $profile->save();
 

@@ -169,42 +169,149 @@
                                 @if(isset($user->residing_state))
                                     <li><b>Residing State:</b> {{ $user->residing_state }}</li>
                                 @endif
-                                @if(isset($user->number_of_siblings))
-                                <li><b>No of Siblings:</b> {{ $user->number_of_siblings }}</li>
-                            @endif
+
+
+<div class="mt-4" style="margin: 1.5rem 0 !important">
+    @if(isset($user->star))
+    <li><b>Star</b> {{ $user->star }}</li>
+@endif
+@if(isset($user->raasi))
+<li><b>Rassi:</b> {{ $user->raasi }}</li>
+@endif
+
+
+
+
+
+@if(isset($user->dosham))
+<li><b>Dosham:</b> {{ $user->dosham }}</li>
+@endif
+@if(isset($user->diet))
+<li><b>Diet:</b> {{ $user->diet }}</li>
+@endif
+
+</div>
 
                             </ul>
 
 
+<br>
 
 
-
-                        @if(isset($user->siblings))
-@php
-$siblings = json_decode($user->siblings, true);
-@endphp
-
-@if(is_array($siblings))
-
-    @foreach($siblings as $sibling)
-    <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <b>Name:</b> {{ $sibling['name'] }}
-            </div>
-            <div class="col-6">
-                <b>Married:</b> {{ $sibling['married'] ? 'Yes' : 'No' }}
-            </div>
-        </div>
-    </div>
-
-    @endforeach
-
-@endif
-@endif
 
 
                         </div>
+
+                        @if(isset($user->siblings))
+    @php
+        $siblings = json_decode($user->siblings, true);
+    @endphp
+
+    <div class="">
+        @if(isset($user->number_of_siblings))
+            <div class="row mb-2">
+                <div class="col-12">
+                    <li><b>No of Siblings:</b> {{ $user->number_of_siblings }}</li>
+                </div>
+            </div>
+        @endif
+
+        @if(is_array($siblings))
+            @foreach($siblings as $sibling)
+                <div class="row mb-2 sibling-info">
+                    <div class="col-6">
+                        <b>Name:  </b>   {{ $sibling['name'] }}
+                    </div>
+                    <div class="col-6">
+                        <b>Married:  </b>   {{ $sibling['married'] ? 'Yes' : 'No' }}
+                    </div>
+                </div>
+            @endforeach
+        @endif
+    </div>
+@endif
+
+
+
+
+
+<div class="">
+
+
+
+
+            <div class="row mb-2 sibling-info">
+                @if(isset($user->father_name))
+                <div class="col-6">
+
+                    <b>Fathers Name:</b> {{ $user->father_name }}
+
+                </div>
+                @endif
+
+                @if(isset($user->father_occupation))
+                <div class="col-6">
+                <b>Fathers Occupation:</b> {{ $user->father_occupation }}
+                </div>
+                @endif
+            </div>
+
+
+
+
+            <div class="row mb-2 sibling-info">
+
+                    @if(isset($user->mother_name))
+                    <div class="col-6">
+                    <b>Mother Name:</b> {{ $user->mother_name }}
+                    </div>
+                    @endif
+
+                @if(isset($user->mother_occupation))
+                <div class="col-6">
+                <b>Mother Occupation:</b> {{ $user->mother_occupation }}
+                </div>
+                @endif
+            </div>
+
+
+</div>
+
+<style>
+.sibling-info {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.sibling-info .col-6 {
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 767px) {
+    .sibling-info .col-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .col-12 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+/* Adjusting container and other elements */
+.container {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+</style>
+
                         <!-- END PROFILE ABOUT -->
                         <!-- PROFILE ABOUT -->
                         {{-- <div class="pr-bio-c pr-bio-hob">

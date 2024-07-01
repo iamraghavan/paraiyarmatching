@@ -12,7 +12,7 @@
                             <h2>Now <b>Find your life partner</b> Easy and fast.</h2>
                         </div>
                         <div class="im">
-                            <img src="{{asset('images/login-couple.png')}}" alt="PMAT01">
+                            <img src="{{ asset('images/login-couple.png') }}" alt="PMAT01">
                         </div>
                         <div class="log-bg">&nbsp;</div>
                     </div>
@@ -21,10 +21,10 @@
                             <div class="form-tit">
                                 <h4>Start for free</h4>
                                 <h1>Sign up to Matrimony</h1>
-                                <p>Already a member? <a href="{{url('/app/login')}}">Login</a></p>
+                                <p>Already a member? <a href="{{ url('/app/login') }}">Login</a></p>
                             </div>
                             <div class="form-login">
-                                <form method="POST" action="{{ route('register') }}">
+                                <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                                     @csrf
 
                                     @if (session('error'))
@@ -72,26 +72,23 @@
                                         @enderror
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="lb" for="email">Email:</label>
-                                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" placeholder="Enter email" name="email" value="{{ old('email') }}" required>
-                                        @error('email')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                        <span class="invalid-feedback" id="email-error"></span>
+                                    <input type="text" id="phone" name="phone" placeholder="Phone Number" required>
+                                    <input type="email" id="email" name="email" placeholder="Email" required>
+                                    <button type="button" id="send-otp-btn">Send OTP</button>
+                                    <div id="otp-verification" style="display: none;">
+                                        <input type="text" id="otp" name="otp" placeholder="Enter OTP">
+                                        <button type="button" id="verify-otp-btn">Verify OTP</button>
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="lb" for="phone">Phone:</label>
-                                        <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone" placeholder="Enter phone number" name="phone" value="{{ old('phone') }}" required maxlength="10">
-                                        @error('phone')
+                                        <label class="lb" for="aadhar_image">Upload Aadhar Card: <span style="color:red">*Aadhar Front Photo / Image</span></label>
+                                        <input required type="file" id="imageInput" accept=".jpg, .jpeg, .png" onchange="uploadImage(event)" class="form-control @error('aadhar_image') is-invalid @enderror" name="aadhar_image" value="{{ old('aadhar_image') }}" required maxlength="14">
+                                        @error('aadhar_image')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
-                                        <span class="invalid-feedback" id="phone-error"></span>
+                                        <span class="invalid-feedback" id="aadhaar-number-error"></span>
                                     </div>
 
                                     <div class="form-group">
@@ -132,7 +129,6 @@
                                 </form>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -140,6 +136,91 @@
     </div>
 </section>
 <!-- END -->
+
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script>
+    function uploadImage(event) {
+        const input = event.target;
+        const file = input.files[0];
+
+        if (!file) {
+            alert('Please select an image file.');
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+            const image = new Image();
+            image.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                // Determine canvas dimensions based on image orientation
+                if (image.width > image.height) {
+                    canvas.width = 800; // Landscape image width
+                    canvas.height = (image.height / image.width) * 800;
+                } else {
+                    canvas.width = 800; // Portrait image height
+                    canvas.height = (image.height / image.width) * 800;
+                }
+
+                // Draw image on canvas
+                ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+                // Convert canvas to base64 data URL
+                const imageBase64 = canvas.toDataURL('image/jpeg');
+
+                // Run Tesseract OCR on the image
+                Tesseract.recognize(
+                    imageBase64,
+                    'eng', // Language - you can change to other languages as needed
+                    { logger: m => console.log(m) } // Optional logger function
+                ).then(({ data: { text } }) => {
+                    // Extract Aadhaar number from OCR result
+                    const regex = /\d{4}\s\d{4}\s\d{4}/;
+                    const matches = text.match(regex);
+                    const aadhaarNumber = matches ? matches[0] : 'Not found';
+
+                    // Update the UI with the extracted Aadhaar number
+                    const aadhaarNumberInput = document.getElementById('aadhaar_number');
+                    if (aadhaarNumberInput) {
+                        if (aadhaarNumber === 'Not found') {
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'Aadhaar Number Not Detected',
+                                text: 'Please upload a horizontally aligned top photo/image of your Aadhaar card.',
+                                imageUrl: '{{ asset('images/aadhaar-instruction.webp') }}',
+                                imageWidth: 700,
+                                imageHeight: 200,
+                                imageAlt: 'Aadhaar Instructions'
+                            });
+                        } else {
+                            aadhaarNumberInput.value = aadhaarNumber;
+                        }
+                    }
+
+                }).catch(error => {
+                    console.error('Error during OCR:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to extract Aadhaar number. Please try again.'
+                    });
+                });
+            };
+
+            // Load the selected image
+            image.src = event.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    }
+</script>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -178,9 +259,6 @@
 
         function validatePhone() {
             const phone = phoneInput.value.trim(); // Trim whitespace
-            if (phone.length > 10) {
-                phoneInput.value = phone.slice(0, 10); // Allow only 10 digits
-            }
             if (!phoneRegex.test(phone)) {
                 phoneError.textContent = 'Please enter a valid 10-digit phone number.';
                 phoneInput.classList.add('is-invalid');
@@ -193,12 +271,9 @@
         }
 
         function validateAadhaarNumber() {
-            let aadhaarNumber = aadhaarNumberInput.value.trim(); // Trim whitespace
-            aadhaarNumber = formatAadhaar(aadhaarNumber);
+            let aadhaarNumber = aadhaarNumberInput.value.replace(/\s+/g, ''); // Remove spaces
+            aadhaarNumber = aadhaarNumber.replace(/(.{4})/g, '$1 ').trim(); // Add spaces every 4 digits
             aadhaarNumberInput.value = aadhaarNumber; // Format Aadhaar number
-            if (aadhaarNumber.length > 14) {
-                aadhaarNumberInput.value = aadhaarNumber.slice(0, 14); // Allow only 14 characters (including spaces)
-            }
             if (!aadhaarRegex.test(aadhaarNumber)) {
                 aadhaarNumberError.textContent = 'Please enter a valid Aadhaar number in the format: 1111 1111 1111.';
                 aadhaarNumberInput.classList.add('is-invalid');
@@ -231,6 +306,11 @@
             submitBtn.disabled = !(isEmailValid && isPhoneValid && isAadhaarNumberValid && isPasswordValid);
         }
 
+        emailInput.addEventListener('blur', validateEmail);
+        phoneInput.addEventListener('blur', validatePhone);
+        aadhaarNumberInput.addEventListener('blur', validateAadhaarNumber);
+        passwordInput.addEventListener('blur', validatePassword);
+
         emailInput.addEventListener('input', validateForm);
         phoneInput.addEventListener('input', validateForm);
         aadhaarNumberInput.addEventListener('input', validateForm);
@@ -238,4 +318,90 @@
     });
 </script>
 
-@endsection
+
+
+
+<script>
+    // Function to check and update OTP request count
+    function canSendOTP() {
+        const otpRequests = localStorage.getItem('otpRequests') || '[]';
+        const requests = JSON.parse(otpRequests);
+        const today = new Date().toISOString().split('T')[0];
+
+        // Filter out requests that are not from today
+        const todayRequests = requests.filter(request => request.date === today);
+
+        if (todayRequests.length >= 2) {
+            return false;
+        }
+
+        // Update local storage with the new request
+        todayRequests.push({ date: today });
+        localStorage.setItem('otpRequests', JSON.stringify(todayRequests));
+        return true;
+    }
+
+    // Event listener for send OTP button
+    document.getElementById('send-otp-btn').addEventListener('click', function() {
+        if (!canSendOTP()) {
+            alert('You have reached the maximum OTP requests for today.');
+            return;
+        }
+
+        const phone = document.getElementById('phone').value;
+        const email = document.getElementById('email').value;
+
+        fetch('/send-otp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ phone, email })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.email_response && data.whatsapp_response) {
+                document.getElementById('otp-verification').style.display = 'block';
+                alert('OTP sent to your email and WhatsApp.');
+            } else {
+                alert('Failed to send OTP.');
+            }
+        });
+    });
+
+    // Event listener for verify OTP button
+    document.getElementById('verify-otp-btn').addEventListener('click', function() {
+        const otp = document.getElementById('otp').value;
+
+        fetch('/verify-otp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ otp })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert('OTP verified successfully.');
+                document.getElementById('phone').disabled = true;
+                document.getElementById('email').disabled = true;
+                document.getElementById('otp-verification').style.display = 'none';
+                document.getElementById('send-otp-btn').style.display = 'none';
+
+                // Clear local storage after successful OTP verification
+                localStorage.removeItem('otpRequests');
+            } else {
+                alert(data.message);
+            }
+        });
+    });
+</script>
+
+
+
+
+
+    @endsection
