@@ -3,147 +3,42 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
-use GuzzleHttp\Client;
-
-
-use Illuminate\Support\Facades\Log;
 
 class VerifyOtpController extends Controller
 {
     public function sendOTP(Request $request)
     {
-        $phone = $request->input('phone');
-        $email = $request->input('email');
-
-        // Prefix phone number with '91' for WhatsApp
-        $whatsappNumber = '91' . $phone;
-
-        // Generate OTP
-        $otp = rand(100000, 999999);
-
-        // Store OTP in the session with a timestamp
-        Session::put('otp', $otp);
-        Session::put('otp_phone', $phone);
-        Session::put('otp_email', $email);
-        Session::put('otp_expires_at', now()->addMinutes(3)); // OTP valid for 3 minutes
-
-        // Send OTP via Email
-        // $emailResponse = $this->sendEmailOTP($email, $otp);
-
-        // Send OTP via WhatsApp
-        $whatsappResponse = $this->sendWhatsAppOTP($whatsappNumber, $otp);
-
-        return response()->json([
-            // 'email_response' => $emailResponse,
-            'whatsapp_response' => $whatsappResponse
+        $request->validate([
+            'email' => 'required|email',
         ]);
+
+        $otp = rand(100000, 999999);
+        Session::put('otp', $otp);
+        Session::put('otp_email', $request->email);
+
+        // Send OTP to email
+        $this->sendEmailOTP($request->email, $otp);
+
+        return response()->json(['message' => 'OTP sent successfully.']);
     }
 
-
-
-    private function sendWhatsAppOTP($whatsappNumber, $otp)
+    public function verifyOTP(Request $request)
     {
-        // Prefix phone number with '91' if it's not already prefixed
-        if (substr($whatsappNumber, 0, 2) !== '91') {
-            $whatsappNumber = '91' . $whatsappNumber;
-        }
+        $request->validate([
+            'otp' => 'required|integer',
+        ]);
 
-        $client = new Client();
+        $otp = Session::get('otp');
+        $otpEmail = Session::get('otp_email');
 
-        try {
-            // Log the request details
-            Log::info('Sending WhatsApp OTP', [
-                'url' => 'https://api.msg91.com/api/v5/whatsapp/whatsapp-outbound-message/',
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'authkey' => '409648ACCWWwhe65ec22faP1',
-                ],
-                'json' => [
-                    'integrated_number' => '917603809257',
-                    'content_type' => 'template',
-                    'payload' => [
-                        'to' => $whatsappNumber,
-                        'type' => 'template',
-                        'template' => [
-                            'name' => 'ktd', // Replace with your template name in MSG91
-                            'language' => [
-                                'code' => 'en',
-                                'policy' => 'deterministic',
-                            ],
-                            'components' => [
-                                [
-                                    'type' => 'body',
-                                    'parameters' => [
-                                        [
-                                            'type' => 'text',
-                                            'text' => 'users', // Replace 'users' with the dynamic name if needed
-                                        ],
-                                        [
-                                            'type' => 'text',
-                                            'text' => $otp,
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        'messaging_product' => 'whatsapp',
-                    ],
-                ],
-            ]);
-
-            $response = $client->request('POST', 'https://api.msg91.com/api/v5/whatsapp/whatsapp-outbound-message/', [
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'authkey' => '409648ACCWWwhe65ec22faP1',
-                ],
-                'json' => [
-                    'integrated_number' => '917603809257',
-                    'content_type' => 'template',
-                    'payload' => [
-                        'to' => $whatsappNumber,
-                        'type' => 'template',
-                        'template' => [
-                            'name' => 'ktd', // Replace with your template name in MSG91
-                            'language' => [
-                                'code' => 'en',
-                                'policy' => 'deterministic',
-                            ],
-                            'components' => [
-                                [
-                                    'type' => 'body',
-                                    'parameters' => [
-                                        [
-                                            'type' => 'text',
-                                            'text' => 'users', // Replace 'users' with the dynamic name if needed
-                                        ],
-                                        [
-                                            'type' => 'text',
-                                            'text' => $otp,
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        'messaging_product' => 'whatsapp',
-                    ],
-                ],
-            ]);
-
-            $statusCode = $response->getStatusCode();
-            $body = $response->getBody()->getContents();
-
-            // Log the response details
-            Log::info('WhatsApp OTP Response', [
-                'statusCode' => $statusCode,
-                'body' => $body,
-            ]);
-
-            return $body; // Return response body or handle further as needed
-        } catch (\Exception $e) {
-            // Log the error
-            Log::error('WhatsApp OTP Error', ['error' => $e->getMessage()]);
-            return $e->getMessage(); // Example: return error message
+        if ($otp && $request->otp == $otp) {
+            Session::forget('otp');
+            Session::forget('otp_email');
+            return response()->json(['message' => 'OTP verified successfully.']);
+        } else {
+            return response()->json(['message' => 'Invalid OTP.'], 422);
         }
     }
 
@@ -186,32 +81,5 @@ class VerifyOtpController extends Controller
         $response = curl_exec($curl);
         curl_close($curl);
         return $response;
-    }
-
-
-
-
-
-    public function verifyOTP(Request $request)
-    {
-        $otp = $request->input('otp');
-
-        // Retrieve OTP and related data from session
-        $storedOtp = Session::get('otp');
-        $otpExpiresAt = Session::get('otp_expires_at');
-
-        // Check if OTP is correct and not expired
-        if ($storedOtp == $otp && now()->lessThanOrEqualTo($otpExpiresAt)) {
-            // OTP is valid
-            Session::forget('otp');
-            Session::forget('otp_expires_at');
-            Session::forget('otp_phone');
-            Session::forget('otp_email');
-
-            return response()->json(['status' => 'success', 'message' => 'OTP verified successfully']);
-        } else {
-            // OTP is invalid or expired
-            return response()->json(['status' => 'error', 'message' => 'Invalid or expired OTP'], 400);
-        }
     }
 }

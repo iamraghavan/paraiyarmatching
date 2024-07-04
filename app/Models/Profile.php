@@ -40,6 +40,8 @@ class Profile extends Model
         'raasi',
         'dosham',
         'diet',
+        'birth_place',
+        'birth_time',
 
     ];
 

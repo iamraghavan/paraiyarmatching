@@ -71,7 +71,6 @@ class ProfileController extends Controller
         return redirect()->route('dashboard')->with('success', 'Profile updated successfully!');
     }
 
-
     public function updatePersonalData(Request $request)
     {
         // Define validation rules
@@ -86,6 +85,8 @@ class ProfileController extends Controller
             'star' => 'required|string|max:255',
             'dosham' => 'required|string|max:255',
             'diet' => 'nullable|in:vegetarian,non_vegetarian,vegan',
+            'birth_place' => 'nullable|string|max:255',
+            'birth_time' => 'nullable|date_format:H:i',
         ];
 
         // Custom error messages
@@ -98,7 +99,9 @@ class ProfileController extends Controller
             'raasi.required' => 'Raasi is required.',
             'star.required' => 'Star is required.',
             'dosham.required' => 'Dosham is required.',
-            'diet.in' => 'Invalid diet option.'
+            'diet.in' => 'Invalid diet option.',
+            'birth_place.max' => 'Birth place may not be greater than 255 characters.',
+            'birth_time.date_format' => 'Invalid birth time format. Please use HH:MM format.',
         ];
 
         // Validate the request
@@ -109,7 +112,7 @@ class ProfileController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // Find the user by PM ID
+        // Find the user profile by PM ID
         $profile = Profile::where('user_pmid', $request->user_pmid)->firstOrFail();
 
         // Update the profile fields
@@ -120,7 +123,10 @@ class ProfileController extends Controller
         $profile->star = $request->input('star');
         $profile->dosham = $request->input('dosham');
         $profile->diet = $request->input('diet');
+        $profile->birth_place = $request->input('birth_place');
+        $profile->birth_time = $request->input('birth_time');
 
+        // Save the updated profile
         $profile->save();
 
         // Redirect to a success page

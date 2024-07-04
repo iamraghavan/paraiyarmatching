@@ -17,7 +17,6 @@ use Kreait\Firebase\Exception\FirebaseException;
 use Illuminate\Support\Facades\File;
 use App\Models\UserPayment;
 
-
 class RegisterController extends Controller
 {
     protected $firebaseStorage;
@@ -43,30 +42,29 @@ class RegisterController extends Controller
 
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'gender' => 'required|in:male,female',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'phone' => 'required|string|size:10|unique:users,phone',
+            'aadhaar_number' => [
+                'required',
+                'string',
+                'size:14',
+                Rule::unique('users')->where(function ($query) use ($request) {
+                    return $query->where('aadhaar_number', $request->aadhaar_number);
+                }),
+            ],
+            'password' => 'required|string|min:8',
+            'agree' => 'required|accepted',
+            'aadhar_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Max 2MB file size and only jpeg, png, jpg
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
+
         try {
-            // Validate form data
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'gender' => 'required|in:male,female',
-                'email' => 'required|string|email|max:255|unique:users,email',
-                'phone' => 'required|string|size:10|unique:users,phone',
-                'aadhaar_number' => [
-                    'required',
-                    'string',
-                    'size:14',
-                    Rule::unique('users')->where(function ($query) use ($request) {
-                        return $query->where('aadhaar_number', $request->aadhaar_number);
-                    }),
-                ],
-                'password' => 'required|string|min:8',
-                'agree' => 'required|accepted',
-                'aadhar_image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Max 2MB file size and only jpeg, png, jpg
-            ]);
-
-            if ($validator->fails()) {
-                return redirect()->back()->withInput()->withErrors($validator);
-            }
-
             // Generate unique PMID
             $pmid = $this->generatePMID($request->gender);
             $uploadedFile = $request->file('aadhar_image');
@@ -83,34 +81,35 @@ class RegisterController extends Controller
             // Generate a signed URL for the uploaded file
             $fileReference = $bucket->object($filePath);
             $signedUrl = $fileReference->signedUrl(new \DateTime('+1 hour'));
-            // Store user data
-            $user = new User();
-            $user->pmid = $pmid;
-            $user->name = $request->name;
-            $user->gender = $request->gender;
-            $user->email = $request->email;
-            $user->phone = $request->phone;
-            $user->aadhaar_number = $request->aadhaar_number;
-            $user->password = Hash::make($request->password);
-            $user->aadhar_image_url = $signedUrl; // Store Firebase Storage URL
-            $user->save();
 
-            $userPayment = new UserPayment();
-            $userPayment->user_pmid = $pmid;
-            $userPayment->name = $request->name;
-            $userPayment->phone_number = $request->phone;
-            $userPayment->package_details = '0 Months';
-            $userPayment->paid_status = 0;
-            $userPayment->date_of_paid = null;
-            $userPayment->plan_expired_date = null;
-            $userPayment->save();
+            // Store user data
+            $user = User::create([
+                'pmid' => $pmid,
+                'name' => $request->name,
+                'gender' => $request->gender,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'aadhaar_number' => $request->aadhaar_number,
+                'password' => Hash::make($request->password),
+                'aadhar_image_url' => $signedUrl, // Store Firebase Storage URL
+            ]);
+
+            UserPayment::create([
+                'user_pmid' => $pmid,
+                'name' => $request->name,
+                'phone_number' => $request->phone,
+                'package_details' => '0 Months',
+                'paid_status' => 0,
+                'date_of_paid' => null,
+                'plan_expired_date' => null,
+            ]);
 
             // Extract necessary details for the email
             $userName = $user->name;
             $aadhaarLastFourDigits = substr($user->aadhaar_number, -4);
 
             // Send welcome email
-            Mail::to($user->email)->send(new WelcomeMail($userName, $aadhaarLastFourDigits));
+            // Mail::to($user->email)->send(new WelcomeMail($userName, $aadhaarLastFourDigits));
 
             // Redirect to the next step after successful registration
             return redirect()->route('login')->with('success', 'Account created successfully! Please update your Aadhaar photo.');
@@ -127,27 +126,15 @@ class RegisterController extends Controller
     private function generatePMID($gender)
     {
         $alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $randomAlph = $alphabet[rand(0, strlen($alphabet) - 1)]
-            . $alphabet[rand(0, strlen($alphabet) - 1)]
-            . $alphabet[rand(0, strlen($alphabet) - 1)];
+        $randomAlph = substr(str_shuffle($alphabet), 0, 3);
 
         // Determine the gender prefix
-        $genderPrefix = '';
-        if (strtolower($gender) === 'male') {
-            $genderPrefix = 'M';
-        } elseif (strtolower($gender) === 'female') {
-            $genderPrefix = 'F';
-        } else {
-            // Default to X if gender is not specified or invalid
-            $genderPrefix = 'X';
-        }
+        $genderPrefix = strtoupper(substr($gender, 0, 1));
 
         // Generate the random number suffix
         $randomNum = str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
 
         // Construct the PMID
-        $pmid = $randomAlph . $genderPrefix . $randomNum;
-
-        return $pmid;
+        return $randomAlph . $genderPrefix . $randomNum;
     }
 }

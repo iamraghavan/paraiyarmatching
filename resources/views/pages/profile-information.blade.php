@@ -170,6 +170,14 @@
                                     <li><b>Residing State:</b> {{ $user->residing_state }}</li>
                                 @endif
 
+                                @if(isset($user->birth_place))
+                                <li><b>Birth Place:</b> {{ $user->birth_place }}</li>
+                                @endif
+
+                                @if(isset($user->birth_time))
+                                <li><b>Birth Time:</b> {{ $user->birth_time }}</li>
+                                @endif
+
 
 <div class="mt-4" style="margin: 1.5rem 0 !important">
     @if(isset($user->star))

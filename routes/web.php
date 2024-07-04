@@ -49,8 +49,8 @@ Route::middleware('guest')->group(function () {
     // Route::post('/api/verify-otp', [OTPController::class, 'verify']);
 
 
-    Route::post('/send-otp', [VerifyOtpController::class, 'sendOTP']);
-    Route::post('/verify-otp', [VerifyOtpController::class, 'verifyOTP']);
+    Route::post('/send-otp', [VerifyOtpController::class, 'sendOTP'])->name('send.otp');
+    Route::post('/verify-otp', [VerifyOtpController::class, 'verifyOTP'])->name('verify.otp');
 });
 
 Route::group(['middleware' => ['auth', 'premium']], function () {

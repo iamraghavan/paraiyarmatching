@@ -72,12 +72,32 @@
                                         @enderror
                                     </div>
 
-                                    <input type="text" id="phone" name="phone" placeholder="Phone Number" required>
+                                    {{-- <input type="text" id="phone" name="phone" placeholder="Phone Number" required>
                                     <input type="email" id="email" name="email" placeholder="Email" required>
                                     <button type="button" id="send-otp-btn">Send OTP</button>
                                     <div id="otp-verification" style="display: none;">
                                         <input type="text" id="otp" name="otp" placeholder="Enter OTP">
                                         <button type="button" id="verify-otp-btn">Verify OTP</button>
+                                    </div> --}}
+
+                                    <div class="form-group">
+                                        <label class="lb" for="email">Email:</label>
+                                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" placeholder="Enter email" name="email" value="{{ old('email') }}" required>
+                                        @error('email')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="lb" for="phone">Phone:</label>
+                                        <input type="number" class="form-control @error('phone') is-invalid @enderror" id="phone" placeholder="Enter phone number" name="phone" value="{{ old('phone') }}" required>
+                                        @error('phone')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
                                     </div>
 
                                     <div class="form-group">
@@ -125,7 +145,9 @@
                                         @enderror
                                     </div>
 
-                                    <button type="submit" id="submit-btn" class="btn btn-primary" disabled>Create Account</button>
+                                    <button type="button" id="sendOtpButton" class="btn btn-primary">Send OTP</button>
+
+                                    <button type="submit" id="registerButton" class="btn btn-primary" style="display: none;">Create Account</button>
                                 </form>
                             </div>
                         </div>
@@ -141,6 +163,113 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+<!-- Form validation and regex -->
+<script>
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail|outlook|hotmail)\.[a-zA-Z]{2,}$/;
+    const phoneRegex = /^\d{10}$/;
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const aadhaarRegex = /^\d{4} \d{4} \d{4}$/;
+
+    function formatAadhaar(aadhaar) {
+        return aadhaar.replace(/(\d{4})(\d{4})(\d{4})/, '$1 $2 $3');
+    }
+
+    function validateEmail(emailInput) {
+        const email = emailInput.value.trim().toLowerCase();
+        if (!emailRegex.test(email)) {
+            emailInput.classList.add('is-invalid');
+            return false;
+        } else {
+            emailInput.classList.remove('is-invalid');
+            return true;
+        }
+    }
+
+    function validatePhone(phoneInput) {
+        const phone = phoneInput.value.trim();
+        if (!phoneRegex.test(phone)) {
+            phoneInput.classList.add('is-invalid');
+            return false;
+        } else {
+            phoneInput.classList.remove('is-invalid');
+            return true;
+        }
+    }
+
+    function validateAadhaarNumber(aadhaarNumberInput) {
+        let aadhaarNumber = aadhaarNumberInput.value.replace(/\s+/g, '');
+        aadhaarNumber = aadhaarNumber.replace(/(.{4})/g, '$1 ').trim();
+        aadhaarNumberInput.value = aadhaarNumber;
+        if (!aadhaarRegex.test(aadhaarNumber)) {
+            aadhaarNumberInput.classList.add('is-invalid');
+            return false;
+        } else {
+            aadhaarNumberInput.classList.remove('is-invalid');
+            return true;
+        }
+    }
+
+    function validatePassword(passwordInput) {
+        const password = passwordInput.value;
+        if (!passwordRegex.test(password)) {
+            passwordInput.classList.add('is-invalid');
+            return false;
+        } else {
+            passwordInput.classList.remove('is-invalid');
+            return true;
+        }
+    }
+
+    function validateForm() {
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const aadhaarNumberInput = document.getElementById('aadhaar_number');
+        const passwordInput = document.getElementById('password');
+        const submitBtn = document.getElementById('registerButton');
+
+        const isEmailValid = validateEmail(emailInput);
+        const isPhoneValid = validatePhone(phoneInput);
+        const isAadhaarNumberValid = validateAadhaarNumber(aadhaarNumberInput);
+        const isPasswordValid = validatePassword(passwordInput);
+
+        submitBtn.disabled =!(isEmailValid && isPhoneValid && isAadhaarNumberValid && isPasswordValid);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const aadhaarNumberInput = document.getElementById('aadhaar_number');
+        const passwordInput = document.getElementById('password');
+
+        emailInput.addEventListener('input', validateForm);
+        phoneInput.addEventListener('input', validateForm);
+        aadhaarNumberInput.addEventListener('input', validateForm);
+        passwordInput.addEventListener('input', validateForm);
+    });
+</script>
+
+<!-- Auto-complete and password suggestion -->
+<script>
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+
+    emailInput.autocomplete = 'email';
+    passwordInput.autocomplete = 'new-password';
+
+    // Add password suggestion
+    passwordInput.addEventListener('input', function() {
+        const password = passwordInput.value;
+        const suggestions = [];
+        if (password.length > 3) {
+            suggestions.push(`Strong password: ${password}!`);
+            suggestions.push(`Try a variation: ${password}123`);
+        }
+        passwordInput.dataset.suggestions = suggestions.join('\n');
+    });
+</script>
+
+<!-- Tesseract OCR -->
 <script>
     function uploadImage(event) {
         const input = event.target;
@@ -183,7 +312,7 @@
                     // Extract Aadhaar number from OCR result
                     const regex = /\d{4}\s\d{4}\s\d{4}/;
                     const matches = text.match(regex);
-                    const aadhaarNumber = matches ? matches[0] : 'Not found';
+                    const aadhaarNumber = matches? matches[0] : 'Not found';
 
                     // Update the UI with the extracted Aadhaar number
                     const aadhaarNumberInput = document.getElementById('aadhaar_number');
@@ -220,188 +349,230 @@
         reader.readAsDataURL(file);
     }
 </script>
+<!-- Your existing form elements -->
 
 
+
+
+<style>
+/* Custom Modal CSS */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1050;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  outline: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-dialog {
+  position: relative;
+  width: auto;
+  margin: 1.75rem auto;
+  pointer-events: none;
+  max-width: 500px;
+}
+
+.modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.3rem;
+  outline: 0;
+}
+
+.modal-header,
+.modal-body,
+.modal-footer {
+  padding: 1rem;
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 1px solid #e9ecef;
+  border-top-left-radius: 0.3rem;
+  border-top-right-radius: 0.3rem;
+}
+
+.modal-title {
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+
+.modal-body {
+  position: relative;
+  flex: 1 1 auto;
+}
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-top: 1px solid #e9ecef;
+  border-bottom-right-radius: 0.3rem;
+  border-bottom-left-radius: 0.3rem;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  opacity: 0.5;
+  z-index: 1040;
+}
+
+.close {
+  float: right;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: 0.5;
+  background: none;
+  border: none;
+}
+
+.close:focus,
+.close:hover {
+  color: #000;
+  text-decoration: none;
+  opacity: 0.75;
+}
+
+.green-tick {
+  width: 50px;
+  height: 50px;
+  background-image: url('/images/icons8-tick.gif');
+  background-size: cover;
+  display: none;
+}
+
+</style>
+
+
+<!-- Custom OTP Modal -->
+<div id="otpModal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="otpModalLabel">OTP Verification</h5>
+                <button type="button" class="close" onclick="closeModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>OTP sent to your registered email ID: <span id="emailId"></span>. Please check the mail in your inbox or spam folder.</p>
+                <div class="form-group">
+                    <label for="otp">Enter OTP:</label>
+                    <input type="text" class="form-control" id="otp" placeholder="Enter OTP">
+                </div>
+                <div id="otpError" class="text-danger" style="display: none;"></div>
+                <div class="green-tick"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Close</button>
+                <button type="button" id="verifyOtpButton" class="btn btn-primary">Verify OTP</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const emailInput = document.getElementById('email');
-        const phoneInput = document.getElementById('phone');
-        const passwordInput = document.getElementById('password');
-        const aadhaarNumberInput = document.getElementById('aadhaar_number');
-        const submitBtn = document.getElementById('submit-btn');
+$(document).ready(function() {
+    const $emailInput = $('#email');
+    const $otpInput = $('#otp');
+    const $sendOtpButton = $('#sendOtpButton');
+    const $verifyOtpButton = $('#verifyOtpButton');
+    const $otpModal = $('#otpModal');
+    const $otpError = $('#otpError');
+    const $greenTick = $('.green-tick');
+    const $registerButton = $('#registerButton');
 
-        const emailError = document.getElementById('email-error');
-        const phoneError = document.getElementById('phone-error');
-        const passwordError = document.getElementById('password-error');
-        const aadhaarNumberError = document.getElementById('aadhaar-number-error');
+    $sendOtpButton.click(function() {
+        const email = $emailInput.val();
 
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail|outlook|hotmail)\.[a-zA-Z]{2,}$/; // Only allow gmail, outlook, hotmail domains
-        const phoneRegex = /^\d{10}$/; // Exactly 10 digits
-        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/; // Minimum 8 characters, include a letter, a number, and a special character
-        const aadhaarRegex = /^\d{4} \d{4} \d{4}$/; // Format: 1111 1111 1111
-
-        function formatAadhaar(aadhaar) {
-            return aadhaar.replace(/(\d{4})(\d{4})(\d{4})/, '$1 $2 $3');
-        }
-
-        function validateEmail() {
-            const email = emailInput.value.trim().toLowerCase(); // Trim whitespace and convert to lowercase
-            if (!emailRegex.test(email)) {
-                emailError.textContent = 'Please enter a valid Gmail, Outlook, or Hotmail email address.';
-                emailInput.classList.add('is-invalid');
-                return false;
-            } else {
-                emailError.textContent = '';
-                emailInput.classList.remove('is-invalid');
-                return true;
+        $.ajax({
+            url: '{{ route("send.otp") }}',
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                email
+            },
+            success: function(response) {
+                $('#emailId').text(email);
+                openModal();
+            },
+            error: function(response) {
+                alert('Error sending OTP. Please try again.');
             }
-        }
-
-        function validatePhone() {
-            const phone = phoneInput.value.trim(); // Trim whitespace
-            if (!phoneRegex.test(phone)) {
-                phoneError.textContent = 'Please enter a valid 10-digit phone number.';
-                phoneInput.classList.add('is-invalid');
-                return false;
-            } else {
-                phoneError.textContent = '';
-                phoneInput.classList.remove('is-invalid');
-                return true;
-            }
-        }
-
-        function validateAadhaarNumber() {
-            let aadhaarNumber = aadhaarNumberInput.value.replace(/\s+/g, ''); // Remove spaces
-            aadhaarNumber = aadhaarNumber.replace(/(.{4})/g, '$1 ').trim(); // Add spaces every 4 digits
-            aadhaarNumberInput.value = aadhaarNumber; // Format Aadhaar number
-            if (!aadhaarRegex.test(aadhaarNumber)) {
-                aadhaarNumberError.textContent = 'Please enter a valid Aadhaar number in the format: 1111 1111 1111.';
-                aadhaarNumberInput.classList.add('is-invalid');
-                return false;
-            } else {
-                aadhaarNumberError.textContent = '';
-                aadhaarNumberInput.classList.remove('is-invalid');
-                return true;
-            }
-        }
-
-        function validatePassword() {
-            const password = passwordInput.value;
-            if (!passwordRegex.test(password)) {
-                passwordError.textContent = 'Password must be at least 8 characters long, include a letter, a number, and a special character.';
-                passwordInput.classList.add('is-invalid');
-                return false;
-            } else {
-                passwordError.textContent = '';
-                passwordInput.classList.remove('is-invalid');
-                return true;
-            }
-        }
-
-        function validateForm() {
-            const isEmailValid = validateEmail();
-            const isPhoneValid = validatePhone();
-            const isAadhaarNumberValid = validateAadhaarNumber();
-            const isPasswordValid = validatePassword();
-            submitBtn.disabled = !(isEmailValid && isPhoneValid && isAadhaarNumberValid && isPasswordValid);
-        }
-
-        emailInput.addEventListener('blur', validateEmail);
-        phoneInput.addEventListener('blur', validatePhone);
-        aadhaarNumberInput.addEventListener('blur', validateAadhaarNumber);
-        passwordInput.addEventListener('blur', validatePassword);
-
-        emailInput.addEventListener('input', validateForm);
-        phoneInput.addEventListener('input', validateForm);
-        aadhaarNumberInput.addEventListener('input', validateForm);
-        passwordInput.addEventListener('input', validateForm);
+        });
     });
-</script>
 
+    $verifyOtpButton.click(function() {
+        const otp = $otpInput.val();
 
+        $.ajax({
+            url: '{{ route("verify.otp") }}',
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                otp
+            },
+            success: function(response) {
+                $otpError.hide();
+                $greenTick.show();
+                $verifyOtpButton.hide();
+                setTimeout(function() {
+                    closeModal();
+                    $sendOtpButton.hide();
+                    $registerButton.show();
+                    $emailInput.attr('readonly', true);
+                    $('#phone').attr('readonly', true);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'OTP Verified',
+                        text: 'Your OTP has been verified successfully. Email: ' + $emailInput.val(),
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    });
+                }, 2000);
+            },
+            error: function(response) {
+                $otpError.text(response.responseJSON.message).show();
+            }
+        });
+    });
 
-
-<script>
-    // Function to check and update OTP request count
-    function canSendOTP() {
-        const otpRequests = localStorage.getItem('otpRequests') || '[]';
-        const requests = JSON.parse(otpRequests);
-        const today = new Date().toISOString().split('T')[0];
-
-        // Filter out requests that are not from today
-        const todayRequests = requests.filter(request => request.date === today);
-
-        if (todayRequests.length >= 2) {
-            return false;
-        }
-
-        // Update local storage with the new request
-        todayRequests.push({ date: today });
-        localStorage.setItem('otpRequests', JSON.stringify(todayRequests));
-        return true;
+    function openModal() {
+        $otpModal.css('display', 'block');
     }
 
-    // Event listener for send OTP button
-    document.getElementById('send-otp-btn').addEventListener('click', function() {
-        if (!canSendOTP()) {
-            alert('You have reached the maximum OTP requests for today.');
-            return;
-        }
-
-        const phone = document.getElementById('phone').value;
-        const email = document.getElementById('email').value;
-
-        fetch('/send-otp', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ phone, email })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.email_response && data.whatsapp_response) {
-                document.getElementById('otp-verification').style.display = 'block';
-                alert('OTP sent to your email and WhatsApp.');
-            } else {
-                alert('Failed to send OTP.');
-            }
-        });
-    });
-
-    // Event listener for verify OTP button
-    document.getElementById('verify-otp-btn').addEventListener('click', function() {
-        const otp = document.getElementById('otp').value;
-
-        fetch('/verify-otp', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ otp })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                alert('OTP verified successfully.');
-                document.getElementById('phone').disabled = true;
-                document.getElementById('email').disabled = true;
-                document.getElementById('otp-verification').style.display = 'none';
-                document.getElementById('send-otp-btn').style.display = 'none';
-
-                // Clear local storage after successful OTP verification
-                localStorage.removeItem('otpRequests');
-            } else {
-                alert(data.message);
-            }
-        });
-    });
+    function closeModal() {
+        $otpModal.css('display', 'none');
+        $otpInput.val('');
+        $otpError.hide();
+        $greenTick.hide();
+        $verifyOtpButton.show();
+    }
+});
 </script>
-
-
-
-
 
     @endsection

@@ -164,6 +164,17 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6 form-group">
+                                            <label for="birth_place">Birth Place</label>
+                                            <input type="text" name="birth_place" id="birth_place" class="form-control" value="{{ old('birth_place', $profile->birth_place) }}" placeholder="Enter birth place">
+                                            <div id="birthPlaceSuggestions" class="list-group" style="position: absolute; z-index: 1000;"></div>
+                                        </div>
+                                        <div class="col-md-6 form-group">
+                                            <label for="birth_time">Birth Time</label>
+                                            <input type="time" name="birth_time" id="birth_time" class="form-control" value="{{ old('birth_time', $profile->birth_time) }}">
+                                        </div>
+                                    </div>
 
 
                                     <script>
@@ -234,6 +245,10 @@
                                                 populateStars(raasiSelect);
                                             }
                                         };
+
+
+
+
                                     </script>
 
 
@@ -309,7 +324,45 @@
 </section>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const birthPlaceInput = document.getElementById('birth_place');
+        const birthPlaceSuggestions = document.getElementById('birthPlaceSuggestions');
 
+        birthPlaceInput.addEventListener('input', function() {
+            const query = birthPlaceInput.value;
+            if (query.length < 3) {
+                birthPlaceSuggestions.innerHTML = '';
+                return;
+            }
+
+            fetch(`https://nominatim.openstreetmap.org/search/${encodeURIComponent(query)}?format=json&addressdetails=1`)
+                .then(response => response.json())
+                .then(data => {
+                    birthPlaceSuggestions.innerHTML = '';
+                    data.forEach(place => {
+                        const suggestionItem = document.createElement('a');
+                        suggestionItem.className = 'list-group-item list-group-item-action';
+                        suggestionItem.textContent = place.display_name;
+                        suggestionItem.addEventListener('click', function() {
+                            birthPlaceInput.value = place.display_name;
+                            birthPlaceSuggestions.innerHTML = '';
+                        });
+                        birthPlaceSuggestions.appendChild(suggestionItem);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching birth place suggestions:', error);
+                });
+        });
+
+        document.addEventListener('click', function(event) {
+            if (!birthPlaceSuggestions.contains(event.target) && event.target !== birthPlaceInput) {
+                birthPlaceSuggestions.innerHTML = '';
+            }
+        });
+    });
+    </script>
 <script>
     $(document).ready(function() {
         const initialSiblings = @json($siblings);
