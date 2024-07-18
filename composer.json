@@ -13,7 +13,7 @@
         "ichtrojan/laravel-otp": "^2.0",
         "kreait/firebase-php": "^7.13",
         "kreait/laravel-firebase": "^5.8",
-        "laravel/framework": "^11.0",
+        "laravel/framework": "^11.16",
         "laravel/tinker": "^2.9",
         "qcod/laravel-imageup": "^1.2",
         "romanzipp/laravel-seo": "^2.7",

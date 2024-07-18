@@ -18,6 +18,14 @@ use App\Mail\WelcomeMail;
 
 use App\Models\User;
 
+
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+
+
+
+
+
 Route::get('/test-mail', function () {
     $user = User::find(6);
 
@@ -51,6 +59,10 @@ Route::middleware('guest')->group(function () {
 
     Route::post('/send-otp', [VerifyOtpController::class, 'sendOTP'])->name('send.otp');
     Route::post('/verify-otp', [VerifyOtpController::class, 'verifyOTP'])->name('verify.otp');
+    Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
 });
 
 Route::group(['middleware' => ['auth', 'premium']], function () {
