@@ -145,9 +145,9 @@
                                         @enderror
                                     </div>
 
-                                    <button type="button" id="sendOtpButton" class="btn btn-primary">Send OTP</button>
+                                    {{-- <button type="button" id="sendOtpButton" class="btn btn-primary">Send OTP</button> --}}
 
-                                    <button type="submit" id="registerButton" class="btn btn-primary" style="display: none;">Create Account</button>
+                                    <button type="submit" id="registerButton" class="btn btn-primary">Create Account</button>
                                 </form>
                             </div>
                         </div>
@@ -492,87 +492,6 @@
     </div>
 </div>
 
-<!-- Scripts -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function() {
-    const $emailInput = $('#email');
-    const $otpInput = $('#otp');
-    const $sendOtpButton = $('#sendOtpButton');
-    const $verifyOtpButton = $('#verifyOtpButton');
-    const $otpModal = $('#otpModal');
-    const $otpError = $('#otpError');
-    const $greenTick = $('.green-tick');
-    const $registerButton = $('#registerButton');
 
-    $sendOtpButton.click(function() {
-        const email = $emailInput.val();
-
-        $.ajax({
-            url: '{{ route("send.otp") }}',
-            type: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                email
-            },
-            success: function(response) {
-                $('#emailId').text(email);
-                openModal();
-            },
-            error: function(response) {
-                alert('Error sending OTP. Please try again.');
-            }
-        });
-    });
-
-    $verifyOtpButton.click(function() {
-        const otp = $otpInput.val();
-
-        $.ajax({
-            url: '{{ route("verify.otp") }}',
-            type: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                otp
-            },
-            success: function(response) {
-                $otpError.hide();
-                $greenTick.show();
-                $verifyOtpButton.hide();
-                setTimeout(function() {
-                    closeModal();
-                    $sendOtpButton.hide();
-                    $registerButton.show();
-                    $emailInput.attr('readonly', true);
-                    $('#phone').attr('readonly', true);
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'OTP Verified',
-                        text: 'Your OTP has been verified successfully. Email: ' + $emailInput.val(),
-                        showCancelButton: false,
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    });
-                }, 2000);
-            },
-            error: function(response) {
-                $otpError.text(response.responseJSON.message).show();
-            }
-        });
-    });
-
-    function openModal() {
-        $otpModal.css('display', 'block');
-    }
-
-    function closeModal() {
-        $otpModal.css('display', 'none');
-        $otpInput.val('');
-        $otpError.hide();
-        $greenTick.hide();
-        $verifyOtpButton.show();
-    }
-});
-</script>
 
     @endsection

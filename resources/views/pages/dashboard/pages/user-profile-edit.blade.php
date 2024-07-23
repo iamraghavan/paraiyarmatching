@@ -396,12 +396,29 @@
                                     </div>
                                 </div>
 
+                                @php
+
+$educationLevels = [
+    'No Formal Education', 'High School', 'Associate Degree', 'Bachelor\'s Degree', 'Master\'s Degree',
+    'Doctorate', 'Professional Degree', 'Other'
+];
+
+                                @endphp
+
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <!-- Education -->
                                         <label class="lb">Education:</label>
-                                        <input type="text" class="form-control" name="education" value="{{ old('education', optional($profile)->education ?? '') }}">
+                                        <select class="form-control" name="education">
+                                            <option value="">Select Education Level</option>
+                                            @foreach($educationLevels as $level)
+                                                <option value="{{ $level }}" {{ old('education', optional($profile)->education) == $level ? 'selected' : '' }}>
+                                                    {{ $level }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
+
                                     <div class="col-md-6 form-group">
                                         <!-- Employed In -->
                                         <label class="lb">Employed In:</label>
@@ -417,33 +434,101 @@
                                     </div>
                                 </div>
 
+                                @php
+
+
+
+                               $occupations = [
+    'Accountant', 'Actor', 'Administrator', 'Agricultural Scientist', 'Airline Pilot', 'Artist', 'Banker',
+    'Biologist', 'Business Analyst', 'Business Owner', 'Chemist', 'Civil Engineer', 'Computer Programmer',
+    'Construction Worker', 'Consultant', 'Cook', 'Dentist', 'Doctor', 'Electrical Engineer', 'Engineer',
+    'Financial Analyst', 'Graphic Designer', 'Healthcare Administrator', 'Human Resources Manager', 'IT Specialist',
+    'Journalist', 'Lawyer', 'Librarian', 'Marketing Manager', 'Mathematician', 'Mechanic', 'Medical Researcher',
+    'Nurse', 'Pharmacist', 'Photographer', 'Pilot', 'Plumber', 'Police Officer', 'Professor', 'Psychologist',
+    'Public Relations Specialist', 'Research Scientist', 'Sales Manager', 'Software Developer', 'Teacher',
+    'Veterinarian', 'Writer', 'Web Developer', 'Other', 'Administrative Officer', 'Agricultural Officer', 'Assistant Commissioner', 'Assistant Director',
+    'Bank Probationary Officer', 'Civil Services Officer', 'Defense Services Officer', 'Diplomat',
+    'Education Officer', 'Forest Ranger', 'Income Tax Officer', 'Inspector', 'Judicial Officer',
+    'Lab Technician', 'Legislative Assistant', 'Police Inspector', 'Postal Services Officer',
+    'Public Prosecutor', 'Revenue Officer', 'Research Officer', 'Revenue Inspector', 'Town Planner'
+];
+
+
+    // Annual income list (1 LPA to 10 LPA)
+    $annualIncomes = [
+        '1 LPA', '2 LPA', '3 LPA', '4 LPA', '5 LPA', '6 LPA', '7 LPA', '8 LPA', '9 LPA', '10 LPA'
+    ];
+
+                                @endphp
+
                                 <div class="row">
-                                    <div class="col-md-6 form-group">
-                                        <!-- Occupation -->
-                                        <label class="lb">Occupation:</label>
-                                        <input type="text" class="form-control" name="occupation" value="{{ old('occupation', optional($profile)->occupation ?? '') }}">
-                                    </div>
-                                    <div class="col-md-6 form-group">
-                                        <!-- Annual Income -->
-                                        <label class="lb">Annual Income:</label>
-                                        <input type="text" class="form-control" name="annual_income" value="{{ old('annual_income', optional($profile)->annual_income ?? '') }}">
-                                    </div>
+                                    <!-- user-profile-edit.blade.php -->
+
+<div class="col-md-6 form-group">
+    <!-- Occupation -->
+    <label class="lb">Occupation:</label>
+    <select class="form-control" name="occupation">
+        <option value="">Select Occupation</option>
+        @foreach($occupations as $occupation)
+            <option value="{{ $occupation }}" {{ old('occupation', optional($profile)->occupation) == $occupation ? 'selected' : '' }}>
+                {{ $occupation }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
+<div class="col-md-6 form-group">
+    <!-- Annual Income -->
+    <label class="lb">Annual Income:</label>
+    <select class="form-control" name="annual_income">
+        <option value="">Select Annual Income</option>
+        @foreach($annualIncomes as $income)
+            <option value="{{ $income }}" {{ old('annual_income', optional($profile)->annual_income) == $income ? 'selected' : '' }}>
+                {{ $income }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <!-- Work Location -->
                                         <label class="lb">Work Location:</label>
-                                        <input type="text" class="form-control" name="work_location" id="work_location" value="{{ old('work_location', optional($profile)->work_location ?? '') }}">
-                                        <ul id="work_location_suggestions" class="suggestions"></ul>
+                                        <select class="form-control" name="work_location" id="work_location">
+                                            @foreach($districts as $district)
+                                                <option value="{{ $district }}">{{ $district }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
+
                                     <div class="col-md-6 form-group">
                                         <!-- Residing State -->
                                         <label class="lb">Residing City:</label>
-                                        <input type="text" class="form-control" name="residing_state" id="residing_state" value="{{ old('residing_state', optional($profile)->residing_state ?? '') }}">
-                                        <ul id="residing_state_suggestions" class="suggestions"></ul>
+                                        <select class="form-control" name="residing_state" id="residing_state">
+                                            @foreach($districts as $district)
+                                                <option value="{{ $district }}">{{ $district }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
+
                                 </div>
+
+                                {{-- <div class="row">
+
+                                    <div class="col-md-6 form-group" id="block-panchayat-union-container">
+                                        <!-- Block/Panchayat Union -->
+                                        <label class="lb">Block/Panchayat Union:</label>
+                                        <select class="form-control" name="block_panchayat_union" id="block_panchayat_union">
+                                            @foreach($subDistricts as $subDistrict)
+    if ('{{ $subDistrict->DISTRICT_NAME }}' === selectedDistrict) {
+        options += '<option value="{{ $subDistrict->Area_Name }}">{{ $subDistrict->Area_Name }}</option>';
+    }
+@endforeach
+                                        </select>
+                                    </div>
+                                </div> --}}
 
 
 
@@ -464,6 +549,8 @@
         </div>
     </div>
 </section>
+
+
 
 <style>
     .suggestions {
@@ -488,75 +575,6 @@
 }
 
 </style>
-
-
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const workLocationInput = document.getElementById('work_location');
-    const residingStateInput = document.getElementById('residing_state');
-    const workLocationSuggestions = document.getElementById('work_location_suggestions');
-    const residingStateSuggestions = document.getElementById('residing_state_suggestions');
-
-    function fetchSuggestions(query, suggestionsElement, inputElement) {
-        axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${query}&addressdetails=1`)
-            .then(response => {
-                const suggestions = response.data;
-                suggestionsElement.innerHTML = '';
-
-                suggestions.forEach(suggestion => {
-                    let displayName = '';
-
-                    if (suggestion.address.city) {
-                        displayName = suggestion.address.city;
-                    } else if (suggestion.address.town) {
-                        displayName = suggestion.address.town;
-                    } else if (suggestion.address.village) {
-                        displayName = suggestion.address.village;
-                    } else if (suggestion.address.county) {
-                        displayName = suggestion.address.county;
-                    }
-
-                    if (displayName) {
-                        const li = document.createElement('li');
-                        li.textContent = displayName;
-                        li.addEventListener('click', function () {
-                            inputElement.value = displayName;
-                            suggestionsElement.innerHTML = '';
-                        });
-                        suggestionsElement.appendChild(li);
-                    }
-                });
-            })
-            .catch(error => console.error('Error fetching suggestions:', error));
-    }
-
-    workLocationInput.addEventListener('input', function () {
-        if (this.value.length > 2) {
-            fetchSuggestions(this.value, workLocationSuggestions, workLocationInput);
-        } else {
-            workLocationSuggestions.innerHTML = '';
-        }
-    });
-
-    residingStateInput.addEventListener('input', function () {
-        if (this.value.length > 2) {
-            fetchSuggestions(this.value, residingStateSuggestions, residingStateInput);
-        } else {
-            residingStateSuggestions.innerHTML = '';
-        }
-    });
-
-    document.addEventListener('click', function (event) {
-        if (!workLocationInput.contains(event.target) && !workLocationSuggestions.contains(event.target)) {
-            workLocationSuggestions.innerHTML = '';
-        }
-        if (!residingStateInput.contains(event.target) && !residingStateSuggestions.contains(event.target)) {
-            residingStateSuggestions.innerHTML = '';
-        }
-    });
-});
-</script>
 
 
 @endsection

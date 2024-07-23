@@ -2,27 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+use App\Models\User;
 
 class VerifyOtpController extends Controller
 {
     public function sendOTP(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email|max:255',
         ]);
 
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first()], 400);
+        }
+
+        $email = $request->email;
+
+        // Check if the email is already registered
+        if (User::where('email', $email)->exists()) {
+            return response()->json(['message' => 'Email is already registered.'], 400);
+        }
+
+        // Generate OTP
         $otp = rand(100000, 999999);
-        Session::put('otp', $otp);
-        Session::put('otp_email', $request->email);
+        session(['otp' => $otp]);
 
         // Send OTP to email
         $this->sendEmailOTP($request->email, $otp);
 
         return response()->json(['message' => 'OTP sent successfully.']);
     }
+
 
     public function verifyOTP(Request $request)
     {

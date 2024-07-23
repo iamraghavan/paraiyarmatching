@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 // use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Illuminate\Support\Facades\Http;
 use App\Models\UserPayment;
-
+use App\Models\Tndv;
 use romanzipp\Seo\Facades\Seo;
 use romanzipp\Seo\Services\SeoService;
 
@@ -69,18 +69,22 @@ class DashboardController extends Controller
             $profile = Profile::where('user_pmid', $user->pmid)->first();
 
 
-            if (Auth::check()) {
-                if ($profile && is_null($profile->horoscope_url)) {
-                    session()->flash('infos', 'Could you please provide your Horoscope Details to complete your profile');
-                }
-            }
+            // if (Auth::check()) {
+            //     if ($profile && is_null($profile->horoscope_url)) {
+            //         session()->flash('infos', 'Could you please provide your Horoscope Details to complete your profile');
+            //     }
+            // }
+
+            $districts = Tndv::select('DISTRICT_NAME')->distinct()->get();
+            $subDistricts = Tndv::all();
 
             // If profile exists
             if ($profile) {
                 // Calculate profile completion percentage
                 $completionPercentage = $this->calculateProfileCompletion($profile);
 
-
+                $districts = Tndv::select('DISTRICT_NAME')->distinct()->pluck('DISTRICT_NAME')->toArray();
+                $subDistricts = Tndv::all();
 
                 // Redirect based on completion percentage
                 if ($completionPercentage >= 100) {
@@ -91,11 +95,19 @@ class DashboardController extends Controller
                     return view('pages.dashboard.pages.index', compact('user', 'profile', 'completionPercentage', 'ipInfo'))->with('info', 'Your profile is halfway complete.');
                 } else {
                     // Redirect to profile edit page if completion percentage is less than 50%
-                    return redirect()->route('user-profile-edit', ['id' => $user->pmid])->with('info', 'Could you please provide the missing data to complete your profile?');
+                    return redirect()->route('user-profile-edit', [
+                        'id' => $user->pmid,
+                        'districts' => $districts,
+                        'subDistricts' => $subDistricts
+                    ])->with('info', 'Could you please provide the missing data to complete your profile?');
                 }
             } else {
                 // If profile doesn't exist, redirect to profile edit page
-                return redirect()->route('user-profile-edit', ['id' => $user->pmid]);
+                return redirect()->route('user-profile-edit', [
+                    'id' => $user->pmid,
+                    'districts' => $districts,
+                    'subDistricts' => $subDistricts
+                ]);
             }
         } else {
             // If user is not authenticated, redirect to login page
@@ -157,11 +169,17 @@ class DashboardController extends Controller
 
             ]);
 
+            $districts = Tndv::select('DISTRICT_NAME')->distinct()->pluck('DISTRICT_NAME')->toArray();
+            $subDistricts = Tndv::all();
 
             // Retrieve the profile associated with the authenticated user
             $profile = Profile::where('user_pmid', $user->pmid)->first();
 
-            return view('pages.dashboard.pages.user-profile-edit', compact('user', 'profile'));
+            return view('pages.dashboard.pages.user-profile-edit')
+                ->with('user', $user)
+                ->with('profile', $profile)
+                ->with('districts', $districts)
+                ->with('subDistricts', $subDistricts);
         } else {
             // If not authenticated, redirect to the login page
             return redirect()->route('login');
@@ -215,7 +233,8 @@ class DashboardController extends Controller
     {
         $user = User::findOrFail($id); // Assuming you have a User model
         $profile = Profile::where('user_id', $id)->first(); // Assuming you have a 'user_id' column in your profiles table
-
+        $districts = Tndv::select('DISTRICT_NAME')->distinct()->get();
+        $subDistricts = Tndv::all();
         if ($profile) {
 
             seo()->addFromArray([
@@ -240,9 +259,19 @@ class DashboardController extends Controller
 
             ]);
 
-            return view('user-profile-edit', compact('user', 'profile'));
+            $districts = Tndv::select('DISTRICT_NAME')->distinct()->pluck('DISTRICT_NAME')->toArray();
+            $subDistricts = Tndv::all();
+
+
+            return view('pages.dashboard.pages.edit-user-profile', compact('user', 'profile', 'districts', 'subDistricts'));
+            // return view('user-profile-edit', compact('user', 'profile', 'tamilNaduDistrictVillage'));
         } else {
-            return redirect()->route('user-profile-edit', ['id' => $user->pmid])->with('info', 'Could you please provide the missing data to complete your profile?');
+            return redirect()->route('user-profile-edit', [
+                'id' => $user->pmid,
+
+                'districts' => $districts,
+                'subDistricts' => $subDistricts
+            ])->with('info', 'Could you please provide the missing data to complete your profile?');
         }
     }
     public function horoscope_upload()
